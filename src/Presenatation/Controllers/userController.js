@@ -1,3 +1,6 @@
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+
 class UserController {
   constructor(userService) {
     this.userService = userService;
@@ -62,6 +65,29 @@ class UserController {
       reply.code(200).send({ user });
     } catch (error) {
       reply.code(200).send({ error: error.message });
+    }
+  }
+
+  async  authorize(req, reply) {
+    try {
+      const token = req.cookies["auth_token"];
+
+      console.log(token);
+  
+      if (!token) {
+        return reply.status(401).send({ message: "Unauthorized" });
+      }
+  
+      const secret = process.env.JWT_SECRET || "";
+  
+      const decoded = jwt.verify(token, secret);
+
+      console.log(decoded)
+  
+  
+      return reply.status(200).send({ user: decoded });
+    } catch (error) {
+      return reply.status(400).send({ message: "Invalid token" });
     }
   }
 

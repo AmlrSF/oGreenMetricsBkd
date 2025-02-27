@@ -13,6 +13,7 @@ async function userRoutes(fastify, options) {
   fastify.get('/users', (req, reply) => userController.getUsers(req, reply));
   fastify.post('/register', (req, reply) => userController.register(req, reply));
   fastify.post('/login', (req, reply) => userController.login(req, reply));
+  fastify.post('/auth', (req, reply) => userController.authorize(req, reply));
   fastify.put('/users/:id', (req, reply) => userController.update(req, reply));
   fastify.get('/users/:id', (req, reply) => userController.getUser(req, reply));
   fastify.delete('/users/:id', (req, reply) => userController.delete(req, reply));
