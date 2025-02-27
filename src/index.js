@@ -1,16 +1,21 @@
 const Fastify = require('fastify');
 const connectDB = require('./Infrastructure/database/mongooseConnection');
+const userRoutes = require('./Presenatation/Routes/userRoute'); 
 
 const app = Fastify();
 const fastifyCookie = require('fastify-cookie');
+const fastifyCors = require('@fastify/cors');
 
 require('dotenv').config();
 
-const userRoutes = require('./Presenatation/Routes/userRoute'); // Adjust the path if needed
 
 
 app.register(fastifyCookie);
-
+app.register(fastifyCors, {
+  origin: "http://localhost:3000", 
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true, 
+});
 
 // Register routes
 app.register(userRoutes);
