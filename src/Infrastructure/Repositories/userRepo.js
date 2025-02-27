@@ -1,6 +1,6 @@
 const UserSchema = require("../../Domain/Entities/user");
 const jwt = require("jsonwebtoken");
-require('dotenv').config();
+require("dotenv").config();
 
 const { hashPassword, comparePassword } = require("../utils/hash");
 
@@ -27,11 +27,11 @@ class UserRepo {
     return result.deletedCount > 0;
   }
 
-  async registerUser(prenom, nom, email, mot_de_passe,role) {
-    return this.createUser(prenom, nom, email, mot_de_passe,role);
+  async registerUser(prenom, nom, email, mot_de_passe, role) {
+    return this.createUser(prenom, nom, email, mot_de_passe, role);
   }
 
-  async createUser(prenom, nom, email, mot_de_passe,role) {
+  async createUser(prenom, nom, email, mot_de_passe, role) {
     const user = await UserSchema.findOne({ email });
     if (user) {
       throw new Error("Email already used");
@@ -39,7 +39,7 @@ class UserRepo {
 
     const hashedPassword = await hashPassword(mot_de_passe);
     console.log(hashPassword);
-    
+
     const userDoc = await UserSchema.create({
       prenom,
       nom,
@@ -49,8 +49,6 @@ class UserRepo {
     });
     return userDoc.toObject();
   }
-
-
 
   async loginUser(email, mot_de_passe) {
     const userDoc = await UserSchema.findOne({ email });
@@ -66,8 +64,9 @@ class UserRepo {
     const token = jwt.sign(
       { id: userDoc._id.toString(), email: userDoc.email },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "3h" }
     );
+
     return { user: userDoc.toObject(), token };
   }
 }

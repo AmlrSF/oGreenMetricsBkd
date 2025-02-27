@@ -2,10 +2,14 @@ const Fastify = require('fastify');
 const connectDB = require('./Infrastructure/database/mongooseConnection');
 
 const app = Fastify();
-const dotenv = require('dotenv').config();
+const fastifyCookie = require('fastify-cookie');
+
+require('dotenv').config();
 
 const userRoutes = require('./Presenatation/Routes/userRoute'); // Adjust the path if needed
 
+
+app.register(fastifyCookie);
 
 
 // Register routes
