@@ -64,7 +64,7 @@ class UserRepo {
     const token = jwt.sign(
       { id: userDoc._id.toString(), email: userDoc.email },
       process.env.JWT_SECRET,
-      { expiresIn: "3h" }
+      { expiresIn: "1h" }
     );
 
     return { user: userDoc.toObject(), token };

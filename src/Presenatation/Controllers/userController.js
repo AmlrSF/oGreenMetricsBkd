@@ -1,3 +1,6 @@
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+
 class UserController {
   constructor(userService) {
     this.userService = userService;
@@ -51,18 +54,40 @@ class UserController {
         mot_de_passe
       );
 
-      // Set JWT token in the cookie
       reply.setCookie("auth_token", token, {
-        httpOnly: true, // Ensures the cookie can't be accessed via JavaScript
-        secure: process.env.NODE_ENV === "production", // Set to true if in production (HTTPS)
-        sameSite: "Strict", // Helps prevent CSRF attacks
+        httpOnly: true, // Prevents client-side JS access
+        secure: process.env.NODE_ENV === "production", // Set to true in production
+        sameSite: "Strict", // Prevents CSRF attacks
         path: "/", // Cookie will be available across the entire site
+        maxAge: 3600, // Cookie expiration time (1 hour)
       });
-
       // Send response
       reply.code(200).send({ user });
     } catch (error) {
-      reply.code(400).send({ error: error.message });
+      reply.code(200).send({ error: error.message });
+    }
+  }
+
+  async  authorize(req, reply) {
+    try {
+      const token = req.cookies["auth_token"];
+
+      console.log(token);
+  
+      if (!token) {
+        return reply.status(401).send({ message: "Unauthorized" });
+      }
+  
+      const secret = process.env.JWT_SECRET || "";
+  
+      const decoded = jwt.verify(token, secret);
+
+      console.log(decoded)
+  
+  
+      return reply.status(200).send({ user: decoded });
+    } catch (error) {
+      return reply.status(400).send({ message: "Invalid token" });
     }
   }
 
