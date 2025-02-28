@@ -30,7 +30,7 @@ class CompanyRepo {
     const updatedCompany = await CompanySchema.findByIdAndUpdate(
       companyId,
       { $set: updateData },
-      { new: true } 
+      { new: true }
     );
     if (!updatedCompany) {
       throw new Error('Company not found');
@@ -48,4 +48,4 @@ class CompanyRepo {
   }
 }
 
-module.exports = new CompanyRepo();
+module.exports = CompanyRepo; // Export the class, not an instance

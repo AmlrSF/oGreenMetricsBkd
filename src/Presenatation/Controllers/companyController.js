@@ -13,18 +13,16 @@ class companyController {
     }
    
     async registercompany(req, reply) {
-      const { companyName, companyEmail, companyAddress } = req.body;
+      console.log(req.body); 
+      const { nom_entreprise, matricule_fiscale, email, num_tel, adresse, date_fondation, industrie } = req.body;
       try {
-        const newCompany = await this.companyService.createCompany(
-          companyName, 
-          companyEmail, 
-          companyAddress
-        );
-        reply.status(201).send({ success: true, data: newCompany });
+        const result = await this.companyService.createCompany(nom_entreprise, matricule_fiscale, email, num_tel, adresse, date_fondation, industrie);
+        reply.send({ success: true, data: result });
       } catch (error) {
         reply.status(400).send({ success: false, message: error.message });
       }
     }
+    
    
     async updatecompany(req, reply) {
       const { id } = req.params;
