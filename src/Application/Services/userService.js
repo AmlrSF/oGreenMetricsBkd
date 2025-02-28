@@ -22,12 +22,11 @@ class UserService {
     async updateUser(id, updateData) {
       return await this.userRepository.updateUser(id, updateData);
     }
-  
-    async deleteUser(id) {
+  async deleteUser(id) {
       return await this.userRepository.deleteUser(id);
     }
- 
-  }
+    
+  } 
   
 module.exports = UserService;
   
