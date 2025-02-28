@@ -1,8 +1,9 @@
 const CompanySchema = require("../../Domain/Entities/company");
-const mongoose = require("mongoose");
+
 require("dotenv").config();
 
 class CompanyRepo {
+  
   // Get all companies
   async getAllCompanies() {
     const companiesData = await CompanySchema.find().lean();
@@ -48,4 +49,4 @@ class CompanyRepo {
   }
 }
 
-module.exports = new CompanyRepo();
+module.exports = CompanyRepo;

@@ -1,13 +1,13 @@
-const companyController = require('../Controllers/companyController');
-const companyService = require('../../Application/Services/companyService');
-const companyRepo = require('../../Infrastructure/Repositories/companyRepo');
+const CompanyRepo = require('../../Infrastructure/Repositories/companyRepo');
+const CompanyService = require('../../Application/Services/companyService');
+const CompanyController = require('../Controllers/companyController');
 
-async function userRoutes(fastify, options) {
+async function CompanyRoutes(fastify, options) {
   
-  // Initialize the repository, service, and controller
-  const companyRepo = new companyRepo();
-  const companyService = new companyService(companyRepo);
-  const companyController = new companyController(companyService);
+  
+  const companyRepo = new CompanyRepo();
+  const companyService = new CompanyService(companyRepo);
+  const companyController = new CompanyController(companyService);
 
   // Define routes
   fastify.get('/companies', (req, reply) => companyController.getCompanies(req, reply));
@@ -17,4 +17,4 @@ async function userRoutes(fastify, options) {
   fastify.delete('/deletecompany/:id', (req, reply) => companyController.deletecompany(req, reply));
 }
 
-module.exports = userRoutes;
+module.exports = CompanyRoutes;

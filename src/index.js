@@ -1,13 +1,13 @@
+
+require('dotenv').config();
 const Fastify = require('fastify');
 const connectDB = require('./Infrastructure/database/mongooseConnection');
 const userRoutes = require('./Presenatation/Routes/userRoute'); 
+const companyRoutes = require("./Presenatation/Routes/companyRoute");
 
 const app = Fastify();
 const fastifyCookie = require('fastify-cookie');
 const fastifyCors = require('@fastify/cors');
-
-require('dotenv').config();
-
 
 
 app.register(fastifyCookie);
@@ -19,6 +19,8 @@ app.register(fastifyCors, {
 
 // Register routes
 app.register(userRoutes);
+app.register(companyRoutes);
+
 
 //connect
 connectDB();

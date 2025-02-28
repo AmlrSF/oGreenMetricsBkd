@@ -71,9 +71,9 @@ class UserRepo {
   }
 
   async sendPasswordResetOtpEmail(email) {
-    const existingUser = await UserRepo.findOne({email});
+    const existingUser = await UserRepo.findOne({ email });
 
-    if(!existingUser){
+    if (!existingUser) {
       throw new Error("There's no account for the provided");
     }
 
@@ -81,13 +81,11 @@ class UserRepo {
       email,
       subject: "Password Reset",
       message: "Enter the code bellow to reset you password",
-      duration:1
-    }
-
+      duration: 1,
+    };
 
     const createOTP = await sendOTP(optdetails);
-    return createOTP
-
+    return createOTP;
   }
 }
 
