@@ -1,42 +1,34 @@
 class CompanyService {
-  constructor(CompanyRepository) {
-    this.CompanyRepository = CompanyRepository;
+  constructor(companyRepository) {
+    this.companyRepository = companyRepository; // Use the repository instance
   }
 
-  async getAllCompany() {
-    return await this.companyRepo.getAllCompany();
+  // Get all companies
+  async getAllCompanies() {
+    return await this.companyRepository.getAllCompanies();
   }
 
-  async registerCompany(
-    nom_entreprise,
-    matricule_fiscale,
-    email,
-    num_tel,
-    adresse,
-    date_fondation,
-    industrie
-  ) {
-    return await this.companyRepo.registerCompany(
-      nom_entreprise,
-      matricule_fiscale,
-      email,
-      num_tel,
-      adresse,
-      date_fondation,
-      industrie
-    );
+  // Create a new company
+  async createCompany(nom_entreprise, matricule_fiscale, email, num_tel, adresse, date_fondation, industrie) {
+    console.log({ nom_entreprise, matricule_fiscale, email, num_tel, adresse, date_fondation, industrie }); // Log company data
+    const companyData = { nom_entreprise, matricule_fiscale, email, num_tel, adresse, date_fondation, industrie };
+    return await this.companyRepository.createCompany(companyData);
   }
+  
 
+  // Get company by ID
   async getCompanyById(id) {
-    return await this.companyRepo.getCompanyById(id);
+    return await this.companyRepository.getCompanyById(id);
   }
 
+  // Update a company
   async updateCompany(id, updateData) {
-    return await this.companyRepo.updateCompany(id, updateData);
+    return await this.companyRepository.updateCompany(id, updateData);
   }
 
+  // Delete a company
   async deleteCompany(id) {
-    return await this.companyRepo.deleteCompany(id);
+    return await this.companyRepository.deleteCompany(id);
   }
 }
 

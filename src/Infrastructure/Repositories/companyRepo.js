@@ -1,9 +1,8 @@
 const CompanySchema = require("../../Domain/Entities/company");
-
+const mongoose = require("mongoose");
 require("dotenv").config();
 
 class CompanyRepo {
-  
   // Get all companies
   async getAllCompanies() {
     const companiesData = await CompanySchema.find().lean();
@@ -31,7 +30,7 @@ class CompanyRepo {
     const updatedCompany = await CompanySchema.findByIdAndUpdate(
       companyId,
       { $set: updateData },
-      { new: true } 
+      { new: true }
     );
     if (!updatedCompany) {
       throw new Error('Company not found');
@@ -49,4 +48,4 @@ class CompanyRepo {
   }
 }
 
-module.exports = CompanyRepo;
+module.exports = CompanyRepo; // Export the class, not an instance
