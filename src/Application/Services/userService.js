@@ -26,6 +26,7 @@ class UserService {
     async deleteUser(id) {
       return await this.userRepository.deleteUser(id);
     }
+ 
   }
   
 module.exports = UserService;

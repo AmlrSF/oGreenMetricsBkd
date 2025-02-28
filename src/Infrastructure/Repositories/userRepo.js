@@ -69,6 +69,26 @@ class UserRepo {
 
     return { user: userDoc.toObject(), token };
   }
+
+  async sendPasswordResetOtpEmail(email) {
+    const existingUser = await UserRepo.findOne({email});
+
+    if(!existingUser){
+      throw new Error("There's no account for the provided");
+    }
+
+    const optdetails = {
+      email,
+      subject: "Password Reset",
+      message: "Enter the code bellow to reset you password",
+      duration:1
+    }
+
+
+    const createOTP = await sendOTP(optdetails);
+    return createOTP
+
+  }
 }
 
 module.exports = UserRepo;
