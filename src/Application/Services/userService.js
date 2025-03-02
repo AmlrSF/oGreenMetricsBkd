@@ -31,6 +31,34 @@ class UserService {
   async deleteUser(id) {
     return await this.userRepository.deleteUser(id);
   }
-}
+
+  async sendOTP(email){
+    return await this.userRepository.sendPasswordResetOtpEmail(email);
+  }
+
+  async findOTPByEmail(email){
+    return await this.userRepository.findOTPByEmail(email);
+  }
+  
+  async deleteOTPByEmail (email){
+    return await this.userRepository.deleteOTPByEmail(email);
+  }
+
+  async resetPassword(email, newPass){
+    return await this.userRepository.resetPassword(email, newPass)
+  }
+
+  async getUserByEmail(email){
+    return await this.userRepository.getUserByEmail(email);
+  }
+
+  async createResetToken(email){
+    return await this.userRepository.createResetToken(email)
+  }
+
+  async verifyAndDeleteResetToken(email, token){
+    return await this.userRepository.verifyAndDeleteResetToken(email, token);
+  }
+} 
 
 module.exports = UserService;

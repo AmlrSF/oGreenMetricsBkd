@@ -23,8 +23,10 @@ app.register(fastifyCors, {
 app.register(userRoutes);
 app.register(companyRoutes);
 
+
 // Connect to database
 connectDB();
+
 
 // Start the server
 const port = process.env.PORT || 3000;

@@ -1,8 +1,12 @@
 const UserSchema = require("../../Domain/Entities/user");
 const jwt = require("jsonwebtoken");
+const crypto = require('crypto');
+
 require("dotenv").config();
 
 const { hashPassword, comparePassword } = require("../utils/hash");
+const sendOTP = require("../utils/sendOTP");
+const OTPSchema = require("../../Domain/Entities/OTP");
 
 class UserRepo {
   async getAllUsers() {
@@ -14,6 +18,17 @@ class UserRepo {
     const userData = await UserSchema.findById(id).lean();
     return userData;
   }
+
+  async getUserByEmail(email) {
+    const userData = await UserSchema.findOne({ email });
+  
+    if (!userData) {
+      throw new Error("User not found");
+    }
+  
+    return userData;
+  }
+  
 
   async updateUser(id, updateData) {
     const userDoc = await UserSchema.findByIdAndUpdate(id, updateData, {
@@ -50,6 +65,29 @@ class UserRepo {
     return userDoc.toObject();
   }
 
+  async resetPassword(email, newPass) {
+    try {
+      const hashedPassword = await hashPassword(newPass);
+
+      console.log("Resetting password for:", email);
+
+     
+      const updatedUser = await UserSchema.findOneAndUpdate(
+        { email: email }, 
+        { mot_de_passe: hashedPassword },
+        { new: true } 
+      );
+
+      if (!updatedUser) {
+        throw new Error("User not found");
+      }
+
+      return { message: "Password updated successfully" };
+    } catch (error) {
+      throw new Error(`Error updating password: ${error.message}`);
+    }
+  }
+
   async loginUser(email, mot_de_passe) {
     const userDoc = await UserSchema.findOne({ email });
     if (!userDoc) {
@@ -71,21 +109,52 @@ class UserRepo {
   }
 
   async sendPasswordResetOtpEmail(email) {
-    const existingUser = await UserRepo.findOne({ email });
-
-    if (!existingUser) {
-      throw new Error("There's no account for the provided");
+    const userDoc = await UserSchema.findOne({ email });
+    if (!userDoc) {
+      throw new Error("User not found");
     }
 
     const optdetails = {
       email,
       subject: "Password Reset",
-      message: "Enter the code bellow to reset you password",
+      message: "Enter the code below to reset your password",
       duration: 1,
     };
 
     const createOTP = await sendOTP(optdetails);
     return createOTP;
+  }
+
+  async findOTPByEmail(email) {
+    const otp = await OTPSchema.findOne({ email });
+    console.log(otp);
+    return otp;
+  }
+
+  async deleteOTPByEmail(email) {
+    return await OTPSchema.deleteOne({ email });
+  }
+
+  async createResetToken(email) {
+    const user = await this.getUserByEmail(email);
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    user.resetToken = resetToken;
+    user.resetTokenExpires = Date.now() + 10 * 60 * 1000;
+    await user.save();
+    return resetToken;
+  }
+
+  async verifyAndDeleteResetToken(email, token) {
+    const user = await this.getUserByEmail(email);
+
+    console.log(token == user.resetToke)
+    if (user.resetToken !== token || user.resetTokenExpires < Date.now()) {
+       throw new Error("Token invalide ou expiré");
+    }
+
+    user.resetToken = null;
+    user.resetTokenExpires = null;
+    await user.save();
   }
 }
 

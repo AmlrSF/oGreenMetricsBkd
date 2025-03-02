@@ -20,6 +20,7 @@
     "fastify-cookie": "^5.6.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.10.2",
+    "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9"
   }
 }
