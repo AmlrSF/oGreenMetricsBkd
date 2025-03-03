@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     mot_de_passe: { type: String, required: true },
     photo_de_profil: { type: String, default: "" },
-    role: { type: String, enum: ["régulier", "entreprise"], required: true },
+    role: { type: String, enum: ["régulier", "entreprise", "Admin", "Moderator"], required: true },
     isVerified: { type: Boolean, default: false },
     resetToken: { type: String, default: null },
     resetTokenExpires: { type: Date, default: null },
@@ -16,3 +16,4 @@ const userSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Utilisateur", userSchema);
+

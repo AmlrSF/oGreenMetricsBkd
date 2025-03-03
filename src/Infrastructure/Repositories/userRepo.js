@@ -105,7 +105,7 @@ class UserRepo {
       { expiresIn: "1h" }
     );
 
-    return { user: userDoc.toObject(), token };
+    return { user: userDoc, token  };
   }
 
   async sendPasswordResetOtpEmail(email) {

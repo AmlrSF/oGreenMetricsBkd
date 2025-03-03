@@ -23,7 +23,6 @@ async function userRoutes(fastify, options) {
     const resetToken = req.query.resetToken; 
     userController.resetPassword(req, reply, resetToken);
   });
-
 }
 
 module.exports = userRoutes;
