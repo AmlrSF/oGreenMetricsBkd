@@ -9,6 +9,7 @@ const sendOTP = require("../utils/sendOTP");
 const OTPSchema = require("../../Domain/Entities/OTP");
 
 class UserRepo {
+  
   async getAllUsers() {
     const usersData = await UserSchema.find().lean();
     return usersData;

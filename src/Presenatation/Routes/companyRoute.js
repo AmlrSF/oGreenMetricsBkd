@@ -8,7 +8,7 @@ async function userRoutes(fastify, options) {
   const companyService = new CompanyService(companyRepository);  
   const companyController = new CompanyController(companyService);
 
-  // Define routes
+  
   fastify.get('/companies', (req, reply) => companyController.getCompanies(req, reply));
   fastify.post('/registercompany', (req, reply) => companyController.registercompany(req, reply));  
   fastify.put('/updatecompany/:id', (req, reply) => companyController.updatecompany(req, reply));  

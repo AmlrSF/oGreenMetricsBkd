@@ -3,13 +3,12 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 class CompanyRepo {
-  // Get all companies
+  
   async getAllCompanies() {
     const companiesData = await CompanySchema.find().lean();
     return companiesData;
   }
 
-  // Get a company by ID
   async getCompanyById(companyId) {
     const company = await CompanySchema.findById(companyId).lean();
     if (!company) {
@@ -18,14 +17,12 @@ class CompanyRepo {
     return company;
   }
 
-  // Create a new company
   async createCompany(companyData) {
     const newCompany = new CompanySchema(companyData);
     await newCompany.save();
     return newCompany;
   }
 
-  // Update a company by ID
   async updateCompany(companyId, updateData) {
     const updatedCompany = await CompanySchema.findByIdAndUpdate(
       companyId,
@@ -38,7 +35,6 @@ class CompanyRepo {
     return updatedCompany;
   }
 
-  // Delete a company by ID
   async deleteCompany(companyId) {
     const result = await CompanySchema.findByIdAndDelete(companyId);
     if (!result) {
@@ -46,6 +42,7 @@ class CompanyRepo {
     }
     return result;
   }
+
 }
 
-module.exports = CompanyRepo; // Export the class, not an instance
+module.exports = CompanyRepo; 

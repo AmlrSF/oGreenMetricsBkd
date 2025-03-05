@@ -4,12 +4,12 @@ const UserRepository = require('../../Infrastructure/Repositories/userRepo');
 
 async function userRoutes(fastify, options) {
   
-  // Initialize the repository, service, and controller
+  
   const userRepository = new UserRepository();
   const userService = new UserService(userRepository);
   const userController = new UserController(userService);
 
-  // Define routes
+  
   fastify.get('/users', (req, reply) => userController.getUsers(req, reply));
   fastify.post('/register', (req, reply) => userController.register(req, reply));
   fastify.post('/forgetPassword', (req, reply) => userController.sendPasswordResetOtpEmail(req, reply));
@@ -19,6 +19,7 @@ async function userRoutes(fastify, options) {
   fastify.put('/users/:id', (req, reply) => userController.update(req, reply));
   fastify.get('/users/:id', (req, reply) => userController.getUser(req, reply));
   fastify.delete('/users/:id', (req, reply) => userController.delete(req, reply));
+  fastify.post('/users/logout', (req, reply) => userController.logout(req, reply));
   fastify.put('/resetPassword', (req, reply) => {
     const resetToken = req.query.resetToken; 
     userController.resetPassword(req, reply, resetToken);

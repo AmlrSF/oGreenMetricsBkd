@@ -1,4 +1,5 @@
 class companyController {
+  
     constructor(companyService) {
       this.companyService = companyService;
     }
@@ -22,7 +23,6 @@ class companyController {
         reply.status(400).send({ success: false, message: error.message });
       }
     }
-    
    
     async updatecompany(req, reply) {
       const { id } = req.params;
@@ -58,6 +58,7 @@ class companyController {
         reply.status(500).send({ success: false, message: error.message });
       }
     }
+
   }
   
   module.exports = companyController;
