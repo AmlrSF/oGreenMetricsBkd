@@ -127,7 +127,7 @@ class UserRepo {
   }
 
   async findOTPByEmail(email) {
-    const otp = await OTPSchema.findOne({ email });
+    const otp = await OTPSchema.findOne({ email }).sort({ expiresAt: -1 });
     console.log(otp);
     return otp;
   }
