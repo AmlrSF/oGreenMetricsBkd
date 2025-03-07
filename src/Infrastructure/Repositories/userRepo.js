@@ -9,6 +9,7 @@ const sendOTP = require("../utils/sendOTP");
 const OTPSchema = require("../../Domain/Entities/OTP");
 
 class UserRepo {
+  
   async getAllUsers() {
     const usersData = await UserSchema.find().lean();
     return usersData;
@@ -105,7 +106,7 @@ class UserRepo {
       { expiresIn: "1h" }
     );
 
-    return { user: userDoc.toObject(), token };
+    return { user: userDoc, token  };
   }
 
   async sendPasswordResetOtpEmail(email) {
@@ -126,7 +127,7 @@ class UserRepo {
   }
 
   async findOTPByEmail(email) {
-    const otp = await OTPSchema.findOne({ email });
+    const otp = await OTPSchema.findOne({ email }).sort({ expiresAt: -1 });
     console.log(otp);
     return otp;
   }

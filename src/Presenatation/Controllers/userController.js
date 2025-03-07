@@ -2,11 +2,11 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 class UserController {
+
   constructor(userService) {
     this.userService = userService;
   }
 
-  // Get all users
   async getUsers(req, reply) {
     try {
       const users = await this.userService.getAllUsers();
@@ -16,7 +16,6 @@ class UserController {
     }
   }
 
-  // Get single user
   async getUser(req, reply) {
     const { id } = req.params;
     try {
@@ -27,11 +26,13 @@ class UserController {
     }
   }
 
-  // Update user details
   async update(req, reply) {
     try {
       const { id } = req.params;
       const updateData = req.body;
+
+      console.log(id, updateData);
+      
       const user = await this.userService.updateUser(id, updateData);
       reply.send(user);
     } catch (error) {
@@ -39,7 +40,6 @@ class UserController {
     }
   }
 
-  // Delete a user by id
   async delete(req, reply) {
     try {
       const { id } = req.params;
@@ -50,7 +50,6 @@ class UserController {
     }
   }
 
-  // Register a new user and return a JWT token
   async register(req, reply) {
     try {
       const { prenom, nom, email, mot_de_passe, role } = req.body;
@@ -68,7 +67,6 @@ class UserController {
     }
   }
 
-  // Log in a user and return a JWT token
   async login(req, reply) {
     try {
       const { email, mot_de_passe } = req.body;
@@ -78,13 +76,13 @@ class UserController {
       );
 
       reply.setCookie("auth_token", token, {
-        httpOnly: true, // Prevents client-side JS access
-        secure: process.env.NODE_ENV === "production", // Set to true in production
-        sameSite: "Strict", // Prevents CSRF attacks
-        path: "/", // Cookie will be available across the entire site
-        maxAge: 3600, // Cookie expiration time (1 hour)
+        httpOnly: true, 
+        secure: process.env.NODE_ENV === "production", 
+        sameSite: "Strict", 
+        path: "/", 
+        maxAge: 3600, 
       });
-      // Send response
+      console.log(user)
       reply.code(200).send({ user });
     } catch (error) {
       reply.code(200).send({ error: error.message });
@@ -105,9 +103,13 @@ class UserController {
 
       const decoded = jwt.verify(token, secret);
 
-      console.log(decoded);
+      const user = await this.userService.getUserById(decoded.id);
+      
+      if(!user) {
+        return reply.status(401).send({ message: "Unauthorized" });
+      }
 
-      return reply.status(200).send({ user: decoded });
+      return reply.status(200).send({ user: user });
     } catch (error) {
       return reply.code(200).send({ error: error.message });
     }
@@ -183,6 +185,24 @@ class UserController {
       reply.status(400).send({ message: error.message });
     }
   }
+
+  async logout(req, reply) {
+    try {
+      // Clear the auth token cookie
+      reply.clearCookie("auth_token", {
+        path: "/",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "Strict"
+      });
+  
+      reply.code(200).send({ message: "Logged out successfully" });
+    } catch (error) {
+      reply.code(500).send({ error: error.message });
+    }
+  }
+  
+
 }
 
 module.exports = UserController;
