@@ -59,6 +59,11 @@ class UserService {
   async verifyAndDeleteResetToken(email, token){
     return await this.userRepository.verifyAndDeleteResetToken(email, token);
   }
+
+  async inviteUser(user){
+    return await this.userRepository.sendEmailInvitation(user);
+  }
+  
 } 
 
 module.exports = UserService;

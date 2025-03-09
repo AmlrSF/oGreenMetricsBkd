@@ -57,11 +57,9 @@ const sendOTP = async ({ email, subject, duration }) => {
         width:600px;
       }
       .otp-digits {
-       
-                display: flex;
+        display: flex;
         justify-content: center;
-        align-items: center;
-        
+        align-items: center;    
         gap: 10px;
         margin: 20px 0;
       }

@@ -16,6 +16,8 @@ class UserController {
     }
   }
 
+ 
+
   async getUser(req, reply) {
     const { id } = req.params;
     try {
@@ -202,6 +204,17 @@ class UserController {
     }
   }
   
+  async InviteUser(req, reply) {
+
+    try {
+      const CreatedpasswordResetOTP = await this.userService.inviteUser(req.body);
+    
+      reply.status(200).send({ CreatedpasswordResetOTP });
+    } catch (error) {
+      console.error("Error in sendPasswordResetOtpEmail:", error);
+      reply.status(400).send({ message: error.message }); 
+    }
+  }
 
 }
 

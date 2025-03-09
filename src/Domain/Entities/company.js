@@ -7,7 +7,9 @@ const CompanySchema = new mongoose.Schema({
   num_tel: { type: String, required: true },
   adresse: { type: String, required: true },
   date_fondation: { type: Date, required: true },
-  industrie: { type: String, required: true }
+  industrie: { type: String, required: true },
+  isVerified : {type: Boolean, default: false ,required: true}
 }, { timestamps: true });
 
 module.exports = mongoose.model('Company', CompanySchema);
+
