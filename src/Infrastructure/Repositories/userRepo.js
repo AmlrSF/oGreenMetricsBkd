@@ -6,6 +6,7 @@ require("dotenv").config();
 
 const { hashPassword, comparePassword } = require("../utils/hash");
 const sendOTP = require("../utils/sendOTP");
+const sendEmailInvitation = require('../utils/sendEmailInvitation');
 const OTPSchema = require("../../Domain/Entities/OTP");
 
 class UserRepo {
@@ -156,6 +157,19 @@ class UserRepo {
     user.resetToken = null;
     user.resetTokenExpires = null;
     await user.save();
+  }
+
+  async sendEmailInvitation(user) {
+
+    const Invitationdetails  = {
+      subject: "Invitaiton ",
+      message : "You've Been Invited to Moderate!",
+      user
+    };
+
+    const createOTP = await sendEmailInvitation(Invitationdetails);
+    return createOTP;
+    
   }
 }
 

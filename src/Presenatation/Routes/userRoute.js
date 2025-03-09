@@ -20,6 +20,7 @@ async function userRoutes(fastify, options) {
   fastify.get('/users/:id', (req, reply) => userController.getUser(req, reply));
   fastify.delete('/users/:id', (req, reply) => userController.delete(req, reply));
   fastify.post('/users/logout', (req, reply) => userController.logout(req, reply));
+  fastify.post('/InviteUser', (req, reply) => userController.InviteUser(req, reply));
   fastify.put('/resetPassword', (req, reply) => {
     const resetToken = req.query.resetToken; 
     userController.resetPassword(req, reply, resetToken);
