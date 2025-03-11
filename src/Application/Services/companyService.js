@@ -7,13 +7,22 @@ class CompanyService {
   async getAllCompanies() {
     return await this.companyRepository.getAllCompanies();
   }
-
-  // Create a new company
-  async createCompany(nom_entreprise, matricule_fiscale, email, num_tel, adresse, date_fondation, industrie) {
-    console.log({ nom_entreprise, matricule_fiscale, email, num_tel, adresse, date_fondation, industrie }); // Log company data
-    const companyData = { nom_entreprise, matricule_fiscale, email, num_tel, adresse, date_fondation, industrie };
-    return await this.companyRepository.createCompany(companyData);
-  }
+ 
+ // Create a new company
+async createCompany(nom_entreprise, matricule_fiscale, email, num_tel, adresse, date_fondation, industrie, userId) {
+  console.log({ nom_entreprise, matricule_fiscale, email, num_tel, adresse, date_fondation, industrie, userId }); // Log company data
+  const companyData = { 
+    nom_entreprise, 
+    matricule_fiscale, 
+    email, 
+    num_tel, 
+    adresse, 
+    date_fondation, 
+    industrie,
+    userId 
+  };
+  return await this.companyRepository.createCompany(companyData);
+}
   
 
   // Get company by ID
