@@ -5,7 +5,7 @@ require("dotenv").config();
 class CompanyRepo {
   
   async getAllCompanies() {
-    const companiesData = await CompanySchema.find().lean();
+    const companiesData = await CompanySchema.find().populate('userId').lean();
     return companiesData;
   }
 

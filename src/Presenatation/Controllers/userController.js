@@ -54,13 +54,14 @@ class UserController {
 
   async register(req, reply) {
     try {
-      const { prenom, nom, email, mot_de_passe, role } = req.body;
+      const { prenom, nom, email, mot_de_passe, role,AdminRoles } = req.body;
       const user = await this.userService.registerUser(
         prenom,
         nom,
         email,
         mot_de_passe,
-        role
+        role,
+        AdminRoles
       );
 
       reply.code(201).send({ user });
@@ -205,8 +206,8 @@ class UserController {
   }
   
   async InviteUser(req, reply) {
-
     try {
+      console.log(req.body)
       const CreatedpasswordResetOTP = await this.userService.inviteUser(req.body);
     
       reply.status(200).send({ CreatedpasswordResetOTP });

@@ -7,13 +7,14 @@ class UserService {
     return await this.userRepository.getAllUsers();
   }
 
-  async registerUser(prenom, nom, email, mot_de_passe, role) {
+  async registerUser(prenom, nom, email, mot_de_passe, role,AdminRoles) {
     return await this.userRepository.registerUser(
       prenom,
       nom,
       email,
       mot_de_passe,
-      role
+      role,
+      AdminRoles
     );
   }
 

@@ -12,7 +12,7 @@ const OTPSchema = require("../../Domain/Entities/OTP");
 class UserRepo {
   
   async getAllUsers() {
-    const usersData = await UserSchema.find().lean();
+    const usersData = await UserSchema.find().populate('AdminRoles').lean();
     return usersData;
   }
 
@@ -44,11 +44,11 @@ class UserRepo {
     return result.deletedCount > 0;
   }
 
-  async registerUser(prenom, nom, email, mot_de_passe, role) {
-    return this.createUser(prenom, nom, email, mot_de_passe, role);
+  async registerUser(prenom, nom, email, mot_de_passe, role,AdminRoles) {
+    return this.createUser(prenom, nom, email, mot_de_passe, role,AdminRoles);
   }
 
-  async createUser(prenom, nom, email, mot_de_passe, role) {
+  async createUser(prenom, nom, email, mot_de_passe, role, AdminRoles) {
     const user = await UserSchema.findOne({ email });
     if (user) {
       throw new Error("Email already used");
@@ -63,6 +63,7 @@ class UserRepo {
       email,
       mot_de_passe: hashedPassword,
       role,
+      AdminRoles
     });
     return userDoc.toObject();
   }
