@@ -2,7 +2,11 @@ const Fastify = require('fastify');
 const connectDB = require('./Infrastructure/database/mongooseConnection');
 const userRoutes = require('./Presenatation/Routes/userRoute'); 
 const companyRoutes = require('./Presenatation/Routes/companyRoute');
+ 
 const fuelRoutes = require('./Presenatation/Routes/fuelRoutes')
+ 
+const roleRoutes = require('./Presenatation/Routes/RoleRoutes');
+ 
 const fastifyCookie = require('fastify-cookie');
 const fastifyCors = require('@fastify/cors');
 
@@ -23,8 +27,11 @@ app.register(fastifyCors, {
 // Register routes
 app.register(userRoutes);
 app.register(companyRoutes);
+ 
 app.register(fuelRoutes)
-
+ 
+app.register(roleRoutes)
+ 
 
 // Connect to database
 connectDB();
