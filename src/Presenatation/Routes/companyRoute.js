@@ -1,19 +1,17 @@
-const CompanyController = require('../Controllers/companyController');
+const CompanyRepo = require('../../Infrastructure/Repositories/companyRepo'); 
 const CompanyService = require('../../Application/Services/companyService');
-const CompanyRepository = require('../../Infrastructure/Repositories/companyRepo');
+const CompanyController = require('../Controllers/companyController');
 
-async function userRoutes(fastify, options) {
-   
-  const companyRepository = new CompanyRepository();
-  const companyService = new CompanyService(companyRepository);  
+async function companyRoute(fastify, options) {
+  const companyRepo = new CompanyRepo();  
+  const companyService = new CompanyService(companyRepo);
   const companyController = new CompanyController(companyService);
 
-  
   fastify.get('/companies', (req, reply) => companyController.getCompanies(req, reply));
-  fastify.post('/registercompany', (req, reply) => companyController.registercompany(req, reply));  
+  fastify.post('/registercompany', (req, reply) => companyController.registerCompany(req, reply));  
   fastify.put('/updatecompany/:id', (req, reply) => companyController.updatecompany(req, reply));  
-  fastify.get('/company/:id', (req, reply) => companyController.getcompany(req, reply)); // 
-  fastify.delete('/deletecompany/:id', (req, reply) => companyController.deletecompany(req, reply)); 
+  fastify.get('/company/:id', (req, reply) => companyController.getCompany(req, reply));
+  fastify.delete('/deletecompany/:id', (req, reply) => companyController.deleteCompany(req, reply)); 
 }
 
-module.exports = userRoutes;
+module.exports = companyRoute;
