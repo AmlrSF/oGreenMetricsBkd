@@ -8,6 +8,7 @@ const CompanySchema = new mongoose.Schema({
   adresse: { type: String, required: true },
   date_fondation: { type: Date, required: true },
   industrie: { type: String, required: true },
+  emissions: { type: Number, default: 0 }, 
   isVerified: { type: Boolean, default: false, required: true },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'Utilisateur', required: true }
 }, { timestamps: true });
