@@ -17,7 +17,7 @@ class UserRepo {
   }
 
   async getUserById(id) {
-    const userData = await UserSchema.findById(id).lean();
+    const userData = await UserSchema.findById(id).populate('AdminRoles').lean();
     return userData;
   }
 
@@ -92,7 +92,7 @@ class UserRepo {
   }
 
   async loginUser(email, mot_de_passe) {
-    const userDoc = await UserSchema.findOne({ email });
+    const userDoc = await UserSchema.findOne({ email }).populate('AdminRoles');
     if (!userDoc) {
       throw new Error("User not found");
     }
