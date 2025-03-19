@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema(
     AdminRoles: {  
       type: mongoose.Schema.Types.ObjectId,
       ref: "Role", 
-      required: true 
     },
     isVerified: { type: Boolean, default: false },
     resetToken: { type: String, default: null },
