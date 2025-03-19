@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 
-const MachineSchema = new mongoose.Schema({
+const machineSchema = new mongoose.Schema({
   nom: { type: String, required: true },
   typeDeCarburant: { type: String, required: true },
   quantite: { type: Number, required: true },
-  co2Emission: { type: Number, required: true },
-  emissionFactor: { type: Number, required: true },
+  co2Emission: { type: Number, default: 0 },
+  emissionFactor: { type: Number, default: 0 },
 });
 
-const FuelCombutionSchema = new mongoose.Schema({
-  machines: [MachineSchema],
-  totalEmissions: { type: Number, required: true },
+const fuelCombutionSchema = new mongoose.Schema({
+  machines: [machineSchema],
+  totalEmissions: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('FuelCombution', FuelCombutionSchema);
+module.exports = mongoose.model('FuelCombution', fuelCombutionSchema);

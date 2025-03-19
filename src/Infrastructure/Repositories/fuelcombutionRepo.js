@@ -1,4 +1,3 @@
-// fuelcombutionRepo.js
 const FuelCombution = require('../../Domain/Entities/fuelcombution');
 
 class FuelCombutionRepository {
@@ -17,6 +16,10 @@ class FuelCombutionRepository {
 
   async findById(id) {
     return await FuelCombution.findById(id);
+  }
+
+  async update(id, data) {
+    return await FuelCombution.findByIdAndUpdate(id, data, { new: true });
   }
 }
 
