@@ -1,16 +1,16 @@
 const mongoose = require('mongoose');
 
-const ProductSchema = new mongoose.Schema({
+const productSchema = new mongoose.Schema({
   nom: { type: String, required: true },
   quantite: { type: Number, required: true },
-  co2Emission: { type: Number, required: true },
-  emissionFactor: { type: Number, required: true },
+  co2Emission: { type: Number, default: 0 },
 });
 
-const ProductionSchema = new mongoose.Schema({
-  products: [ProductSchema],
-  totalEmissions: { type: Number, required: true },
+const productionSchema = new mongoose.Schema({
+  products: [productSchema],
+  totalEmissions: { type: Number, default: 0 },
+  emissionFactor: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Production', ProductionSchema);
+module.exports = mongoose.model('Production', productionSchema);

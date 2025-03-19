@@ -17,6 +17,10 @@ class ProductionRepository {
   async findById(id) {
     return await Production.findById(id);
   }
+
+  async update(id, data) {
+    return await Production.findByIdAndUpdate(id, data, { new: true });
+  }
 }
 
 module.exports = new ProductionRepository();
