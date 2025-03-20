@@ -9,7 +9,7 @@ class CompanyRepo {
   }
 
   async getCompanyById(companyId) {
-      const company = await CompanySchema.findById(companyId).lean();
+      const company = await CompanySchema.findById(companyId).populate('userId').lean();
       if (!company) {
           throw new Error('Company not found');
       }
