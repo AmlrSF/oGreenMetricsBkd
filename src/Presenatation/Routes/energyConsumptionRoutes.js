@@ -1,4 +1,3 @@
-// Presentation/Routes/energyConsumptionRoutes.js
 const EnergyConsumptionRepo = require('../../Infrastructure/Repositories/energyConsumptionRepo');
 const EnergyConsumptionService = require('../../Application/Services/energyConsumptionService');
 const EnergyConsumptionController = require('../Controllers/energyConsumptionController');
@@ -10,6 +9,8 @@ async function energyConsumptionRoute(fastify, options) {
 
   fastify.get('/energy-consumption', (req, reply) => energyConsumptionController.getEnergyConsumption(req, reply));
   fastify.post('/energy-consumption', (req, reply) => energyConsumptionController.addEnergyConsumption(req, reply));
+  fastify.put('/energy-consumption/:id', (req, reply) => energyConsumptionController.updateEnergyConsumption(req, reply));
+  fastify.delete('/energy-consumption/:id', (req, reply) => energyConsumptionController.deleteEnergyConsumption(req, reply));
 }
 
 module.exports = energyConsumptionRoute;

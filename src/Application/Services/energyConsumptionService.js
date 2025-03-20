@@ -1,4 +1,3 @@
-// Services/energyConsumptionService.js
 const EnergyConsumptionRepo = require('../../Infrastructure/Repositories/energyConsumptionRepo');
 
 class EnergyConsumptionService {
@@ -59,6 +58,16 @@ class EnergyConsumptionService {
     } else {
       return await this.energyConsumptionRepo.updateEnergyConsumption(existingData._id, energyData);
     }
+  }
+
+  async updateEnergyConsumption(id, yearlyConsumption, country) {
+    const emissions = await this.calculateEmissions(yearlyConsumption, country);
+    const energyData = { yearlyConsumption, emissions, country };
+    return await this.energyConsumptionRepo.updateEnergyConsumption(id, energyData);
+  }
+
+  async deleteEnergyConsumption(id) {
+    return await this.energyConsumptionRepo.deleteEnergyConsumption(id);
   }
 }
 

@@ -1,4 +1,3 @@
-// Repositories/energyConsumptionRepo.js
 const EnergyConsumptionSchema = require('../../Domain/Entities/energyConsumption');
 
 class EnergyConsumptionRepo {
@@ -23,6 +22,14 @@ class EnergyConsumptionRepo {
       throw new Error('EnergyConsumption record not found');
     }
     return updatedEnergy;
+  }
+
+  async deleteEnergyConsumption(id) {
+    const result = await EnergyConsumptionSchema.findByIdAndDelete(id);
+    if (!result) {
+      throw new Error('EnergyConsumption record not found');
+    }
+    return result;
   }
 }
 

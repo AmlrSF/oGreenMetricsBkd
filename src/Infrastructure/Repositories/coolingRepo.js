@@ -1,4 +1,3 @@
-// Repositories/coolingRepo.js
 const CoolingSchema = require('../../Domain/Entities/cooling');
 
 class CoolingRepo {
@@ -23,6 +22,21 @@ class CoolingRepo {
       throw new Error('Cooling record not found');
     }
     return updatedCooling;
+  }
+
+  async deleteCooler(recordId, coolerId) {
+    const record = await CoolingSchema.findById(recordId);
+    if (!record) {
+      throw new Error('Cooling record not found');
+    }
+    const coolerIndex = record.coolers.findIndex(cooler => cooler._id.toString() === coolerId);
+    if (coolerIndex === -1) {
+      throw new Error('Cooler not found');
+    }
+    const [cooler] = record.coolers.splice(coolerIndex, 1);
+    record.totalEmissions -= cooler.emissions;
+    await record.save();
+    return record;
   }
 }
 

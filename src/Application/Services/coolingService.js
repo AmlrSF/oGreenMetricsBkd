@@ -1,4 +1,4 @@
-// Services/coolingService.js
+// Application/Services/coolingService.js
 const CoolingRepo = require('../../Infrastructure/Repositories/coolingRepo');
 
 class CoolingService {
@@ -39,6 +39,31 @@ class CoolingService {
       };
       return await this.coolingRepo.updateCooling(existingData._id, updatedData);
     }
+  }
+
+  async updateCooler(recordId, coolerId, name, type, energy) {
+    const existingData = await this.coolingRepo.getCooling();
+    if (!existingData._id || existingData._id.toString() !== recordId) {
+      throw new Error('Cooling record not found');
+    }
+
+    const coolerIndex = existingData.coolers.findIndex(cooler => cooler._id.toString() === coolerId);
+    if (coolerIndex === -1) {
+      throw new Error('Cooler not found');
+    }
+
+    const oldEmissions = existingData.coolers[coolerIndex].emissions;
+    const emissionFactor = await this.getEmissionFactor(type);
+    const emissions = await this.calculateEmissions(energy, type);
+
+    existingData.coolers[coolerIndex] = { _id: coolerId, name, type, energy, emissionFactor, emissions };
+    existingData.totalEmissions = existingData.totalEmissions - oldEmissions + emissions;
+
+    return await this.coolingRepo.updateCooling(recordId, existingData);
+  }
+
+  async deleteCooler(recordId, coolerId) {
+    return await this.coolingRepo.deleteCooler(recordId, coolerId);
   }
 }
 
