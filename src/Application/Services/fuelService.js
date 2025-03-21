@@ -1,3 +1,4 @@
+// Modified fuelService.js
 const fuelcombutionRepo = require('../../Infrastructure/Repositories/fuelcombutionRepo');
 const productionRepo = require('../../Infrastructure/Repositories/productionRepo');
 
@@ -15,7 +16,7 @@ class FuelService {
     this.productionRepo = productionRepo;
   }
 
-  async addFuelCombution(data) {
+  async addFuelCombution(data, companyId) {
     const { machines } = data;
     if (!machines || !Array.isArray(machines) || machines.length === 0) {
       throw new Error("Machines array is required and must not be empty");
@@ -32,8 +33,8 @@ class FuelService {
       emissionFactor: emissionFactor,
     };
 
-    // Find the first existing record (we'll use a single record for all machines)
-    let existingRecord = await this.fuelcombutionRepo.findOne({});
+    // Find the existing record for this company
+    let existingRecord = await this.fuelcombutionRepo.findOne({ companyId });
     if (existingRecord) {
       // Append the new machine to the existing record
       existingRecord.machines.push(updatedMachine);
@@ -47,21 +48,22 @@ class FuelService {
         totalEmissions: existingRecord.totalEmissions,
       });
     } else {
-      // Create a new record if none exists
+      // Create a new record if none exists for this company
       const newData = {
         machines: [updatedMachine],
         totalEmissions: co2Emission,
+        companyId
       };
       return await this.fuelcombutionRepo.create(newData);
     }
   }
 
-  async getFuelCombutions() {
-    const records = await this.fuelcombutionRepo.findAll();
-    return records.length > 0 ? [records[0]] : []; // Return only the first record
+  async getFuelCombutions(companyId) {
+    const records = await this.fuelcombutionRepo.findOne({ companyId });
+    return records ? [records] : [];
   }
 
-  async addProduction(data) {
+  async addProduction(data, companyId) {
     const { products } = data;
     if (!products || !Array.isArray(products) || products.length === 0) {
       throw new Error("Products array is required and must not be empty");
@@ -78,8 +80,8 @@ class FuelService {
       emissionFactor: emissionFactor,
     };
 
-    // Find the first existing record
-    let existingRecord = await this.productionRepo.findOne({});
+    // Find the existing record for this company
+    let existingRecord = await this.productionRepo.findOne({ companyId });
     if (existingRecord) {
       existingRecord.products.push(updatedProduct);
       existingRecord.totalEmissions = existingRecord.products.reduce(
@@ -94,14 +96,15 @@ class FuelService {
       const newData = {
         products: [updatedProduct],
         totalEmissions: co2Emission,
+        companyId
       };
       return await this.productionRepo.create(newData);
     }
   }
 
-  async getProductions() {
-    const records = await this.productionRepo.findAll();
-    return records.length > 0 ? [records[0]] : []; // Return only the first record
+  async getProductions(companyId) {
+    const records = await this.productionRepo.findOne({ companyId });
+    return records ? [records] : [];
   }
 }
 

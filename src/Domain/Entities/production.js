@@ -1,3 +1,4 @@
+// Modified production.js (Domain/Entities)
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
@@ -10,6 +11,7 @@ const productionSchema = new mongoose.Schema({
   products: [productSchema],
   totalEmissions: { type: Number, default: 0 },
   emissionFactor: { type: Number, default: 0 },
+  companyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true },
   createdAt: { type: Date, default: Date.now },
 });
 
