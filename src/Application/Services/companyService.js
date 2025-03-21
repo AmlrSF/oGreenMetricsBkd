@@ -36,7 +36,8 @@ class CompanyService {
     const productionData = {
         products: [],
         totalEmissions: 0,
-        emissionFactor: emissionFactor
+        emissionFactor: emissionFactor,
+        companyId: newCompany._id  // Add this line to include the company ID
     };
     await ProductionRepository.create(productionData);
     

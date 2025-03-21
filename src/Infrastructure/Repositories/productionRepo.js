@@ -6,8 +6,8 @@ class ProductionRepository {
     return await production.save();
   }
 
-  async findAll() {
-    return await Production.find();
+  async findAll(criteria = {}) {
+    return await Production.find(criteria);
   }
 
   async findOne(criteria) {

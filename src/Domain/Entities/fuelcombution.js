@@ -1,3 +1,4 @@
+// Modified fuelcombution.js (Domain/Entities)
 const mongoose = require('mongoose');
 
 const machineSchema = new mongoose.Schema({
@@ -11,6 +12,7 @@ const machineSchema = new mongoose.Schema({
 const fuelCombutionSchema = new mongoose.Schema({
   machines: [machineSchema],
   totalEmissions: { type: Number, default: 0 },
+  companyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true },
   createdAt: { type: Date, default: Date.now },
 });
 
