@@ -1,14 +1,16 @@
 const ProductionRepository = require('../../Infrastructure/Repositories/productionRepo');
-const UserRepository = require('../../Infrastructure/Repositories/userRepo'); // Import the UserRepository
 
 class CompanyService {
   constructor(companyRepo) {
     this.companyRepo = companyRepo;
-    this.userRepo = new UserRepository(); // Initialize the UserRepository
   }
 
   async getAllCompanies(userId) {
     return await this.companyRepo.getAllCompanies(userId);
+  }
+ 
+  async getCompanyByOwnerId(userId) {
+    return await this.companyRepo.getCompanyByOwnerId(userId);
   }
 
   async createCompany(nom_entreprise, matricule_fiscale, email, num_tel, adresse, date_fondation, industrie, userId) {
@@ -37,14 +39,12 @@ class CompanyService {
         products: [],
         totalEmissions: 0,
         emissionFactor: emissionFactor,
-        companyId: newCompany._id  // Add this line to include the company ID
+        companyId: newCompany._id
     };
     await ProductionRepository.create(productionData);
     
-    /**
-     * Update user with the companyId
-     */
-    await this.userRepo.updateUser(userId, { companyId: newCompany._id });
+    // Remove the user update since we removed the bidirectional relationship
+    
     return newCompany;
   }
 

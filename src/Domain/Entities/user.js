@@ -15,7 +15,6 @@ const userSchema = new mongoose.Schema(
     isVerified: { type: Boolean, default: false },
     resetToken: { type: String, default: null },
     resetTokenExpires: { type: Date, default: null },
-    companyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' }, // Add companyId field
   },
   { timestamps: true }
 );

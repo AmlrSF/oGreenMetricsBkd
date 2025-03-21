@@ -1,18 +1,24 @@
-// Modified fuelController.js
 const fuelService = require('../../Application/Services/fuelService');
+const CompanyRepo = require('../../Infrastructure/Repositories/companyRepo');
 
 class FuelController {
+  constructor() {
+    this.companyRepo = new CompanyRepo();
+  }
+
   async addFuelCombution(req, reply) {
     try {
       console.log('Inside addFuelCombution:', req.body);
       const data = req.body;
       const user = req.user;
       
-      if (!user || !user.companyId) {
+      // Get the company for this user instead of relying on companyId in user model
+      const company = await this.companyRepo.getCompanyByOwnerId(user._id);
+      if (!company) {
         return reply.code(401).send({ error: "User not associated with a company" });
       }
       
-      const result = await fuelService.addFuelCombution(data, user.companyId);
+      const result = await fuelService.addFuelCombution(data, company._id);
       reply.code(201).send(result);
     } catch (error) {
       console.error('Error in addFuelCombution:', error.message);
@@ -25,11 +31,13 @@ class FuelController {
       console.log('Inside getFuelCombutions');
       const user = req.user;
       
-      if (!user || !user.companyId) {
+      // Get the company for this user
+      const company = await this.companyRepo.getCompanyByOwnerId(user._id);
+      if (!company) {
         return reply.code(401).send({ error: "User not associated with a company" });
       }
       
-      const fuelCombutions = await fuelService.getFuelCombutions(user.companyId);
+      const fuelCombutions = await fuelService.getFuelCombutions(company._id);
       reply.code(200).send(fuelCombutions);
     } catch (error) {
       console.error('Error in getFuelCombutions:', error.message);
@@ -43,11 +51,13 @@ class FuelController {
       const data = req.body;
       const user = req.user;
       
-      if (!user || !user.companyId) {
+      // Get the company for this user
+      const company = await this.companyRepo.getCompanyByOwnerId(user._id);
+      if (!company) {
         return reply.code(401).send({ error: "User not associated with a company" });
       }
       
-      const result = await fuelService.addProduction(data, user.companyId);
+      const result = await fuelService.addProduction(data, company._id);
       reply.code(201).send(result);
     } catch (error) {
       console.error('Error in addProduction:', error.message);
@@ -60,11 +70,12 @@ class FuelController {
       console.log('Inside getProductions');
       const user = req.user;
       
-      if (!user || !user.companyId) {
+      const company = await this.companyRepo.getCompanyByOwnerId(user._id);
+      if (!company) {
         return reply.code(401).send({ error: "User not associated with a company" });
       }
       
-      const productions = await fuelService.getProductions(user.companyId);
+      const productions = await fuelService.getProductions(company._id);
       reply.code(200).send(productions);
     } catch (error) {
       console.error('Error in getProductions:', error.message);
