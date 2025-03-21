@@ -1,9 +1,9 @@
 const CompanySchema = require('../../Domain/Entities/company');  
 
 class CompanyRepo {
-  async getAllCompanies() {
+  async getAllCompanies(userId) {
  
-    const companiesData = await CompanySchema.find().populate('userId').lean();
+    const companiesData = await CompanySchema.find({ userId }).populate('userId').lean();
     return companiesData;
  
   }

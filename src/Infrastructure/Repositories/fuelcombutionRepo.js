@@ -6,8 +6,8 @@ class FuelCombutionRepository {
     return await fuelCombution.save();
   }
 
-  async findAll() {
-    return await FuelCombution.find();
+  async findAll(criteria = {}) {
+    return await FuelCombution.find(criteria);
   }
 
   async findOne(criteria) {
