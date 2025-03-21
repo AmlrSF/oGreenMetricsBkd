@@ -69,6 +69,15 @@ class CompanyController {
       }
   }
  
+  async GetCompanyByOwnerID(req,reply){
+    const { id } = req.params;
+    try {
+        const company = await this.companyService.GetCompanyByOwnerID(id);
+        reply.send({ success: true, data: company });
+    } catch (error) {
+        reply.status(500).send({ success: false, message: error.message });
+    }
+  }
       
   
 }

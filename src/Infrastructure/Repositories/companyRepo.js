@@ -42,6 +42,15 @@ class CompanyRepo {
       return result;
   }
 
+  async GetCompanyByOwnerID(id){
+    const company = await CompanySchema.find({userId:id}).populate('userId').lean();
+    if (!company) {
+        throw new Error('Company not found');
+    }
+    return company;
+  }
+
+
  
 }
 

@@ -11,6 +11,7 @@ async function companyRoute(fastify, options) {
   fastify.post('/registercompany', (req, reply) => companyController.registerCompany(req, reply));  
   fastify.put('/updatecompany/:id', (req, reply) => companyController.updatecompany(req, reply));  
   fastify.get('/company/:id', (req, reply) => companyController.getCompany(req, reply));
+  fastify.get('/GetCompanyByOwnerID/:id', (req, reply) => companyController.GetCompanyByOwnerID(req, reply));
   fastify.delete('/deletecompany/:id', (req, reply) => companyController.deleteCompany(req, reply)); 
 }
 
