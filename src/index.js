@@ -8,6 +8,8 @@ const energyConsumptionRoutes = require("./Presenatation/Routes/energyConsumptio
 const heatingRoutes = require("./Presenatation/Routes/heatingRoutes");
 const coolingRoutes = require("./Presenatation/Routes/coolingRoutes");
 const transport = require("./Presenatation/Routes/scope-3/TransportRoute");
+const dechets = require("./Presenatation/Routes/scope-3/DechetRoutes");
+const capitalGoods = require("./Presenatation/Routes/scope-3/CapitalGoodRoutes");
 const fastifyCookie = require("fastify-cookie");
 const fastifyCors = require("@fastify/cors");
 
@@ -36,6 +38,9 @@ app.register(coolingRoutes);
 
 //scope 3
 app.register(transport);
+app.register(dechets);
+app.register(capitalGoods)
+
 
 // Connect to database
 connectDB();
