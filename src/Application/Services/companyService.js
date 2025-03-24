@@ -56,6 +56,10 @@ class CompanyService {
     return await this.companyRepo.updateCompany(id, updateData);
   }
 
+  async GetCompanyByOwnerID(id){
+    return await this.companyRepo.GetCompanyByOwnerID(id);
+  }
+
   async deleteCompany(id) {
     return await this.companyRepo.deleteCompany(id);
   }
