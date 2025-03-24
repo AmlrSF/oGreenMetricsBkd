@@ -1,21 +1,26 @@
 const CompanySchema = require('../../Domain/Entities/company');  
 
 class CompanyRepo {
-  async getAllCompanies(userId) {
- 
-    const companiesData = await CompanySchema.find({ userId }).populate('userId').lean();
-    return companiesData;
- 
-  }
-
-  async getCompanyById(companyId) {
-      const company = await CompanySchema.findById(companyId).populate('userId').lean();
-      if (!company) {
-          throw new Error('Company not found');
+    async getAllCompanies(userId) {
+        const companiesData = await CompanySchema.find({ userId }).populate('userId').lean();
+        return companiesData;
       }
-      return company;
-  }
-
+    
+      async getCompanyById(companyId) {
+        const company = await CompanySchema.findById(companyId).populate('userId').lean();
+        if (!company) {
+          throw new Error('Company not found');
+        }
+        return company;
+      }
+      
+      async getCompanyByOwnerId(userId) {
+        const company = await CompanySchema.findOne({ userId }).populate('userId').lean();
+        if (!company) {
+          throw new Error('Company not found for this user');
+        }
+        return company;
+      }
   async createCompany(companyData) {
       const newCompany = new CompanySchema(companyData);
       await newCompany.save();
