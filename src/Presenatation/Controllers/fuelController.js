@@ -82,6 +82,78 @@ class FuelController {
       reply.code(500).send({ error: error.message });
     }
   }
+  async deleteFuelCombution(req, reply) {
+    try {
+      const { id } = req.params;
+      const user = req.user;
+      
+      const company = await this.companyRepo.getCompanyByOwnerId(user._id);
+      if (!company) {
+        return reply.code(401).send({ error: "User not associated with a company" });
+      }
+      
+      const result = await fuelService.deleteFuelCombution(id, company._id);
+      reply.code(200).send(result);
+    } catch (error) {
+      console.error('Error in deleteFuelCombution:', error.stack); // Log full stack trace
+      reply.code(500).send({ error: error.message });
+    }
+  }
+  
+  async deleteProduction(req, reply) {
+    try {
+      const { id } = req.params;
+      const user = req.user;
+      
+      const company = await this.companyRepo.getCompanyByOwnerId(user._id);
+      if (!company) {
+        return reply.code(401).send({ error: "User not associated with a company" });
+      }
+      
+      const result = await fuelService.deleteProduction(id, company._id);
+      reply.code(200).send(result);
+    } catch (error) {
+      console.error('Error in deleteProduction:', error.stack); // Log full stack trace
+      reply.code(500).send({ error: error.message });
+    }
+  }
+  async updateFuelCombution(req, reply) {
+    try {
+      const { id } = req.params;
+      const data = req.body;
+      const user = req.user;
+      
+      const company = await this.companyRepo.getCompanyByOwnerId(user._id);
+      if (!company) {
+        return reply.code(401).send({ error: "User not associated with a company" });
+      }
+      
+      const result = await fuelService.updateFuelCombution(id, data, company._id);
+      reply.code(200).send(result);
+    } catch (error) {
+      console.error('Error in updateFuelCombution:', error.message);
+      reply.code(500).send({ error: error.message });
+    }
+  }
+  
+  async updateProduction(req, reply) {
+    try {
+      const { id } = req.params;
+      const data = req.body;
+      const user = req.user;
+      
+      const company = await this.companyRepo.getCompanyByOwnerId(user._id);
+      if (!company) {
+        return reply.code(401).send({ error: "User not associated with a company" });
+      }
+      
+      const result = await fuelService.updateProduction(id, data, company._id);
+      reply.code(200).send(result);
+    } catch (error) {
+      console.error('Error in updateProduction:', error.message);
+      reply.code(500).send({ error: error.message });
+    }
+  }
 }
 
 module.exports = new FuelController();

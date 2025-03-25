@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const machineSchema = new mongoose.Schema({
   nom: { type: String, required: true },
   typeDeCarburant: { type: String, required: true },
+  modele: {type:String, required : true},
   quantite: { type: Number, required: true },
   co2Emission: { type: Number, default: 0 },
   emissionFactor: { type: Number, default: 0 },
