@@ -11,21 +11,9 @@ async function companyRoute(fastify, options) {
   fastify.post('/registercompany', (req, reply) => companyController.registerCompany(req, reply));  
   fastify.put('/updatecompany/:id', (req, reply) => companyController.updatecompany(req, reply));  
   fastify.get('/company/:id', (req, reply) => companyController.getCompany(req, reply));
-  fastify.get('/GetCompanyByOwnerID/:id', (req, reply) => companyController.GetCompanyByOwnerID(req, reply));
+  fastify.get('/GetCompanyByOwnerID/:id', (req, reply) => companyController.getCompanyByOwnerId(req, reply));
   fastify.delete('/deletecompany/:id', (req, reply) => companyController.deleteCompany(req, reply)); 
-  fastify.get("/GetCompanyByOwnerID/:ownerId", async (req, res) => {
-    try {
-      const ownerId = req.params.ownerId;
-      const company = await Company.findOne({ ownerId });
-      if (company) {
-        res.status(200).json(company);
-      } else {
-        res.status(404).json({ message: "Company not found" });
-      }
-    } catch (error) {
-      res.status(500).json({ message: "Error fetching company" });
-    }
-  });
+
   
 }
 

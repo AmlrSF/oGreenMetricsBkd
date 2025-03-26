@@ -15,9 +15,9 @@ class CompanyController {
   
     // Add this new method to get company by owner ID
     async getCompanyByOwnerId(req, reply) {
-      const { userId } = req.params;
+      const { id } = req.params;
       try {
-        const company = await this.companyService.getCompanyByOwnerId(userId);
+        const company = await this.companyService.getCompanyByOwnerId(id);
         reply.send({ success: true, data: company });
       } catch (error) {
         reply.status(404).send({ success: false, message: error.message });
