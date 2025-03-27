@@ -36,6 +36,7 @@ class TransportService {
     const emissions = (parseFloat(emissionFactor) * poids * distance).toFixed(
       2
     );
+    
 
     const Transport = {
       ...transportObj,
