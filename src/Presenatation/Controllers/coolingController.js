@@ -4,8 +4,9 @@ class CoolingController {
   }
 
   async getCooling(req, reply) {
+    const { company_id } = req.params; // Expect company_id from route
     try {
-      const cooling = await this.coolingService.getCooling();
+      const cooling = await this.coolingService.getCoolingByCompanyId(company_id);
       reply.send({ success: true, data: cooling });
     } catch (error) {
       reply.status(500).send({ success: false, message: error.message });
@@ -13,9 +14,9 @@ class CoolingController {
   }
 
   async addCooling(req, reply) {
-    const { name, type, energy } = req.body;
+    const { name, type, energy, company_id } = req.body; // Added company_id
     try {
-      const result = await this.coolingService.addCooling(name, type, energy);
+      const result = await this.coolingService.addCooling(name, type, energy, company_id);
       reply.send({ success: true, data: result });
     } catch (error) {
       reply.status(400).send({ success: false, message: error.message });

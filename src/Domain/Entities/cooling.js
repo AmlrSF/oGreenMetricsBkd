@@ -1,4 +1,3 @@
-// Entities/cooling.js
 const mongoose = require('mongoose');
 
 const coolerSchema = new mongoose.Schema({
@@ -12,6 +11,7 @@ const coolerSchema = new mongoose.Schema({
 const coolingSchema = new mongoose.Schema({
   coolers: [coolerSchema],
   totalEmissions: { type: Number, default: 0 },
+  company_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true }, // Added
   createdAt: { type: Date, default: Date.now },
 });
 

@@ -4,8 +4,9 @@ class HeatingController {
   }
 
   async getHeating(req, reply) {
+    const { company_id } = req.params; // Expect company_id from route
     try {
-      const heating = await this.heatingService.getHeating();
+      const heating = await this.heatingService.getHeatingByCompanyId(company_id);
       reply.send({ success: true, data: heating });
     } catch (error) {
       reply.status(500).send({ success: false, message: error.message });
@@ -13,9 +14,9 @@ class HeatingController {
   }
 
   async addHeating(req, reply) {
-    const { name, type, energy } = req.body;
+    const { name, type, energy, company_id } = req.body; // Added company_id
     try {
-      const result = await this.heatingService.addHeating(name, type, energy);
+      const result = await this.heatingService.addHeating(name, type, energy, company_id);
       reply.send({ success: true, data: result });
     } catch (error) {
       reply.status(400).send({ success: false, message: error.message });

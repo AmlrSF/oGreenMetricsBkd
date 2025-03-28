@@ -12,17 +12,17 @@ class CompanyController {
         reply.status(500).send({ success: false, message: error.message });
       }
     }
-  
-    // Add this new method to get company by owner ID
-    async getCompanyByOwnerId(req, reply) {
-      const { id } = req.params;
-      try {
-        const company = await this.companyService.getCompanyByOwnerId(id);
-        reply.send({ success: true, data: company });
-      } catch (error) {
-        reply.status(404).send({ success: false, message: error.message });
-      }
-    }
+ 
+   
+        async getCompanyByOwnerId(req, reply) {
+          const { id } = req.params;
+          try {
+            const company = await this.companyService.getCompanyByOwnerId(id);
+            reply.send({ success: true, data: company });
+          } catch (error) {
+            reply.status(404).send({ success: false, message: error.message });
+          }
+        }   
   
     async registerCompany(req, reply) {
       console.log("Register Company Request Body:", req.body);

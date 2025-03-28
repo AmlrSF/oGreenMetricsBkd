@@ -1,4 +1,3 @@
-// Modified fuelService.js
 const fuelcombutionRepo = require('../../Infrastructure/Repositories/fuelcombutionRepo');
 const productionRepo = require('../../Infrastructure/Repositories/productionRepo');
 
@@ -105,6 +104,124 @@ class FuelService {
   async getProductions(companyId) {
     const records = await this.productionRepo.findOne({ companyId });
     return records ? [records] : [];
+  }
+  async deleteFuelCombution(machineId, companyId) {
+  const record = await this.fuelcombutionRepo.findOne({ companyId });
+  if (!record) {
+    throw new Error("Record not found");
+  }
+  
+  // Convert both to strings and use strict comparison
+  const machineIndex = record.machines.findIndex(m => String(m._id) === String(machineId));
+  if (machineIndex === -1) {
+    throw new Error("Machine not found");
+  }
+  
+  // Remove the machine
+  record.machines.splice(machineIndex, 1);
+  
+  // Recalculate totalEmissions
+  record.totalEmissions = record.machines.reduce(
+    (sum, machine) => sum + (machine.co2Emission || 0), 0);
+  
+  return await this.fuelcombutionRepo.update(record._id, {
+    machines: record.machines,
+    totalEmissions: record.totalEmissions,
+  });
+}
+  
+  async deleteProduction(productId, companyId) {
+    const record = await this.productionRepo.findOne({ companyId });
+    if (!record) {
+      throw new Error("Record not found");
+    }
+    
+    const productIndex = record.products.findIndex(p => p._id.toString() === productId);
+    if (productIndex === -1) {
+      throw new Error("Product not found");
+    }
+    
+    // Remove the product
+    record.products.splice(productIndex, 1);
+    
+    // Recalculate totalEmissions
+    record.totalEmissions = record.products.reduce(
+      (sum, product) => sum + product.co2Emission, 0);
+    
+    return await this.productionRepo.update(record._id, {
+      products: record.products,
+      totalEmissions: record.totalEmissions,
+    });
+  }
+  
+  async updateFuelCombution(machineId, updatedMachine, companyId) {
+    const record = await this.fuelcombutionRepo.findOne({ companyId });
+    if (!record) {
+      throw new Error("Record not found");
+    }
+    
+    const machineIndex = record.machines.findIndex(m => m._id.toString() === machineId);
+    if (machineIndex === -1) {
+      throw new Error("Machine not found");
+    }
+    
+    // Calculate emissions
+    const emissionFactor = EMISSION_FACTORS[updatedMachine.typeDeCarburant] || 0;
+    const co2Emission = updatedMachine.quantite * emissionFactor;
+    
+    // Update the machine
+    const newMachine = {
+      ...record.machines[machineIndex],
+      ...updatedMachine,
+      co2Emission: co2Emission,
+      emissionFactor: emissionFactor
+    };
+    
+    record.machines[machineIndex] = newMachine;
+    
+    // Recalculate totalEmissions
+    record.totalEmissions = record.machines.reduce(
+      (sum, machine) => sum + machine.co2Emission, 0);
+    
+    return await this.fuelcombutionRepo.update(record._id, {
+      machines: record.machines,
+      totalEmissions: record.totalEmissions,
+    });
+  }
+  
+  async updateProduction(productId, updatedProduct, companyId) {
+    const record = await this.productionRepo.findOne({ companyId });
+    if (!record) {
+      throw new Error("Record not found");
+    }
+    
+    const productIndex = record.products.findIndex(p => p._id.toString() === productId);
+    if (productIndex === -1) {
+      throw new Error("Product not found");
+    }
+    
+    // For now, assuming no emissions calculation needed for products
+    const emissionFactor = 0;
+    const co2Emission = updatedProduct.quantite * emissionFactor;
+    
+    // Update the product
+    const newProduct = {
+      ...record.products[productIndex],
+      ...updatedProduct,
+      co2Emission: co2Emission,
+      emissionFactor: emissionFactor
+    };
+    
+    record.products[productIndex] = newProduct;
+    
+    // Recalculate totalEmissions
+    record.totalEmissions = record.products.reduce(
+      (sum, product) => sum + product.co2Emission, 0);
+    
+    return await this.productionRepo.update(record._id, {
+      products: record.products,
+      totalEmissions: record.totalEmissions,
+    });
   }
 }
 

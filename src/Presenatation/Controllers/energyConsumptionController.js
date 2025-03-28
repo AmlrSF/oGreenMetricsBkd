@@ -4,8 +4,9 @@ class EnergyConsumptionController {
   }
 
   async getEnergyConsumption(req, reply) {
+    const { company_id } = req.params; // Expect company_id from route
     try {
-      const energyConsumption = await this.energyConsumptionService.getEnergyConsumption();
+      const energyConsumption = await this.energyConsumptionService.getEnergyConsumptionByCompanyId(company_id);
       reply.send({ success: true, data: energyConsumption });
     } catch (error) {
       reply.status(500).send({ success: false, message: error.message });
@@ -13,9 +14,9 @@ class EnergyConsumptionController {
   }
 
   async addEnergyConsumption(req, reply) {
-    const { yearlyConsumption, country } = req.body;
+    const { yearlyConsumption, country, company_id } = req.body; // Added company_id
     try {
-      const result = await this.energyConsumptionService.addEnergyConsumption(yearlyConsumption, country);
+      const result = await this.energyConsumptionService.addEnergyConsumption(yearlyConsumption, country, company_id);
       reply.send({ success: true, data: result });
     } catch (error) {
       reply.status(400).send({ success: false, message: error.message });
