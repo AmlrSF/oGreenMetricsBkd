@@ -92,6 +92,8 @@ class UserRepo {
   }
 
   async loginUser(email, mot_de_passe) {
+
+    console.log(email,mot_de_passe)
     const userDoc = await UserSchema.findOne({ email }).populate('AdminRoles');
     if (!userDoc) {
       throw new Error("User not found");

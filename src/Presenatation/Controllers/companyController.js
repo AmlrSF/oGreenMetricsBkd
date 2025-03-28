@@ -12,6 +12,7 @@ class CompanyController {
         reply.status(500).send({ success: false, message: error.message });
       }
     }
+ 
    
         async getCompanyByOwnerId(req, reply) {
           const { id } = req.params;
@@ -21,7 +22,7 @@ class CompanyController {
           } catch (error) {
             reply.status(404).send({ success: false, message: error.message });
           }
-        }  
+        }   
   
     async registerCompany(req, reply) {
       console.log("Register Company Request Body:", req.body);

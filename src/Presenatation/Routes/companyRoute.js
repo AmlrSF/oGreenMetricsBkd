@@ -13,7 +13,7 @@ async function companyRoute(fastify, options) {
   fastify.get('/company/:id', (req, reply) => companyController.getCompany(req, reply));
   fastify.get('/GetCompanyByOwnerID/:id', (req, reply) => companyController.getCompanyByOwnerId(req, reply));
   fastify.delete('/deletecompany/:id', (req, reply) => companyController.deleteCompany(req, reply)); 
-
+ 
 }
 
 module.exports = companyRoute;

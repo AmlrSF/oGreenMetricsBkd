@@ -73,10 +73,14 @@ class UserController {
   async login(req, reply) {
     try {
       const { email, mot_de_passe } = req.body;
+      console.log(req.body);
       const { user, token } = await this.userService.loginUser(
         email,
         mot_de_passe
       );
+
+      
+      
 
       reply.setCookie("auth_token", token, {
         httpOnly: true, 
@@ -96,7 +100,7 @@ class UserController {
     try {
       const token = req.cookies["auth_token"];
 
-      console.log(token);
+      //console.log(token);
 
       if (!token) {
         return reply.status(401).send({ message: "Unauthorized" });
