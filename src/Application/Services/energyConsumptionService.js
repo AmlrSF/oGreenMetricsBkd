@@ -44,15 +44,14 @@ class EnergyConsumptionService {
     return yearlyConsumption * emissionFactor;
   }
 
-  async getEnergyConsumption() {
-    return await this.energyConsumptionRepo.getEnergyConsumption();
+  async getEnergyConsumptionByCompanyId(company_id) { // Updated method
+    return await this.energyConsumptionRepo.getEnergyConsumptionByCompanyId(company_id);
   }
 
-  async addEnergyConsumption(yearlyConsumption, country) {
+  async addEnergyConsumption(yearlyConsumption, country, company_id) { // Added company_id
     const emissions = await this.calculateEmissions(yearlyConsumption, country);
-    const energyData = { yearlyConsumption, emissions, country };
-
-    const existingData = await this.energyConsumptionRepo.getEnergyConsumption();
+    const energyData = { yearlyConsumption, emissions, country, company_id };
+    const existingData = await this.energyConsumptionRepo.getEnergyConsumptionByCompanyId(company_id);
     if (!existingData._id) {
       return await this.energyConsumptionRepo.createEnergyConsumption(energyData);
     } else {
