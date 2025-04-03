@@ -1,6 +1,14 @@
-const Production = require('../../Domain/Entities/production');
+const Production = require("../../Domain/Entities/production");
 
 class ProductionRepository {
+  
+  async getScope1DataByDateRange(startDate, endDate, company_id) {
+    return await Production.find({
+      createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
+      companyId: company_id,
+    }).lean();
+  }
+
   async create(data) {
     const production = new Production(data);
     return await production.save();

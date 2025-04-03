@@ -19,13 +19,13 @@ class CompanyRepo {
   }
 
   async getCompanyByOwnerId(userId) {
-    console.log(userId);
+    //console.log(userId);
     
     const company = await CompanySchema.findOne({ userId })
       .populate("userId")
       .lean();
 
-      console.log(company);
+      //console.log(company);
       
     if (!company) {
       throw new Error("Company not found for this user");

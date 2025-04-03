@@ -73,7 +73,7 @@ class UserController {
   async login(req, reply) {
     try {
       const { email, mot_de_passe } = req.body;
-      console.log(req.body);
+      
       const { user, token } = await this.userService.loginUser(
         email,
         mot_de_passe

@@ -2,6 +2,14 @@ require("dotenv").config();
 const Dechet = require("../../../Domain/Entities/scope3/Dechets"); // Ensure this path is correct
 
 class DechetRepo {
+
+   async getScope3DataByDateRange(startDate, endDate, company_id) {
+      return await Dechet.find({
+        createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
+        company_id: company_id,
+      }).lean();
+    }
+
   async getAllDechets() {
     return await Dechet.find().lean();
   }

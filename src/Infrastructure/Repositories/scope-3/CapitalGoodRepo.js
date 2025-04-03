@@ -1,6 +1,13 @@
 require("dotenv").config();
-const CapitalGood = require('../../../Domain/Entities/scope3/CapitalGoods');
+const CapitalGood = require("../../../Domain/Entities/scope3/CapitalGoods");
 class CapitalGoodRepo {
+  async getScope3DataByDateRange(startDate, endDate, company_id) {
+    return await CapitalGood.find({
+      createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
+      company_id: company_id,
+    }).lean();
+  }
+
   async getAllCapitalGoods() {
     return await CapitalGood.find().lean();
   }

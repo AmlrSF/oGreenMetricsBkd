@@ -16,6 +16,9 @@ const {
   businessTravel
 } = require("./Presenatation/Routes/scope-3");
 
+const report = require("./Presenatation/Routes/report/reportRoutes");
+
+
 const fastifyCookie = require("fastify-cookie");
 const fastifyCors = require("@fastify/cors");
 
@@ -48,6 +51,9 @@ app.register(dechets);
 app.register(capitalGoods);
 app.register(businessTravel)
 
+
+//report
+app.register(report);
 // Connect to database
 connectDB();
 

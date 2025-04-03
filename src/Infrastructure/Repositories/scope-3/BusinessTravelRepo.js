@@ -1,7 +1,14 @@
 require("dotenv").config();
-const BusinessTravel = require("../../../Domain/Entities/scope3/buisnessTravel"); 
+const BusinessTravel = require("../../../Domain/Entities/scope3/buisnessTravel");
 
 class BusinessTravelRepo {
+  async getScope3DataByDateRange(startDate, endDate, company_id) {
+    return await BusinessTravel.find({
+      createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
+      company_id: company_id,
+    }).lean();
+  }
+
   async getAllBusinessTravels() {
     const businessTravelsData = await BusinessTravel.find().lean();
     return businessTravelsData;

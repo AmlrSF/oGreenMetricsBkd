@@ -10,10 +10,12 @@ const EMISSION_FACTORS = {
 };
 
 class FuelService {
+
   constructor(fuelcombutionRepo, productionRepo) {
     this.fuelcombutionRepo = fuelcombutionRepo;
     this.productionRepo = productionRepo;
   }
+
 
   async addFuelCombution(data, companyId) {
     const { machines } = data;
@@ -105,6 +107,7 @@ class FuelService {
     const records = await this.productionRepo.findOne({ companyId });
     return records ? [records] : [];
   }
+
   async deleteFuelCombution(machineId, companyId) {
   const record = await this.fuelcombutionRepo.findOne({ companyId });
   if (!record) {

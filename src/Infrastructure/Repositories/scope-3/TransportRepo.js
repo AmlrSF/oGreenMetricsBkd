@@ -2,16 +2,21 @@ require("dotenv").config();
 const Transport = require("../../../Domain/Entities/scope3/Transport"); // Ensure this path is correct
 
 class TransportRepo {
+  async getScope3DataByDateRange(startDate, endDate, company_id) {
+    return await Transport.find({
+      createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
+      company_id: company_id,
+    }).lean();
+  }
+
   async getAllTransports() {
     const transportsData = await Transport.find().lean();
     return transportsData;
   }
 
   async getTransportById(company_id) {
-    const transport = await Transport.find({ company_id: company_id })
-      .lean();
+    const transport = await Transport.find({ company_id: company_id }).lean();
 
-    
     return transport;
   }
 
