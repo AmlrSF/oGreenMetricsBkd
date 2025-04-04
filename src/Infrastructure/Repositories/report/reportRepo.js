@@ -29,8 +29,7 @@ class ReportRepo {
       scope2: reportData.scope2,
       scope3: reportData.scope3,
       
-      startDate: reportData.startDate,
-      endDate: reportData.endDate,
+      Year:reportData.Year,
       
       includeCharts: reportData.includeCharts,
       detailLevel: reportData.detailLevel,

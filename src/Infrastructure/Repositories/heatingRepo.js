@@ -1,12 +1,9 @@
-const HeatingSchema = require("../../Domain/Entities/production");
+const HeatingSchema = require("../../Domain/Entities/heating");
 
 class HeatingRepo {
   
-  async getScope2DataByDateRange(startDate, endDate, company_id) {
-    return await FuelCombution.find({
-      createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
-      company_id: company_id, 
-    }).lean();
+  async getHeatByid(company_id) {
+    return await HeatingSchema.find({company_id: company_id}).lean();
   }
 
   async getHeatingByCompanyId(company_id) {
@@ -15,6 +12,8 @@ class HeatingRepo {
       ? heatingData[0]
       : { heaters: [], totalEmissions: 0, company_id };
   }
+
+
 
   async createHeating(heatingData) {
     const newHeating = new HeatingSchema(heatingData);

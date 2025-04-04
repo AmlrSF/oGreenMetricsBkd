@@ -2,9 +2,8 @@ const EnergyConsumptionSchema = require("../../Domain/Entities/energyConsumption
 
 class EnergyConsumptionRepo {
   
-  async getScope2DataByDateRange(startDate, endDate, company_id) {
+  async getEnergyByCompanyId(company_id) {
     return await EnergyConsumptionSchema.find({
-      createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
       company_id: company_id,
     }).lean();
   }

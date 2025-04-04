@@ -18,6 +18,10 @@ class ProductionRepository {
     return await Production.find(criteria);
   }
 
+  async getproductionbyID(company_id){
+    return await Production.find({companyId:company_id})
+  }
+
   async findOne(criteria) {
     return await Production.findOne(criteria);
   }
