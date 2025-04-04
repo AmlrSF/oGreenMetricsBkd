@@ -192,7 +192,28 @@ class UserController {
       reply.status(400).send({ message: error.message });
     }
   }
+  async changePassword(req, reply) {
+    try {
+      const { userId, currentPassword, newPassword } = req.body;
+ 
+      const token = req.cookies["auth_token"];
+      if (!token) {
+        return reply.status(401).send({ message: "Unauthorized" });
+      }
 
+      const secret = process.env.JWT_SECRET || "";
+      const decoded = jwt.verify(token, secret); 
+      if (decoded.id !== userId) {
+        return reply.status(403).send({ message: "Forbidden: Cannot change another user's password" });
+      }
+ 
+      const result = await this.userService.changePassword(userId, currentPassword, newPassword);
+      
+      reply.status(200).send({ message: "Password changed successfully" });
+    } catch (error) {
+      reply.status(400).send({ message: error.message });
+    }
+  }
   async logout(req, reply) {
     try {
       // Clear the auth token cookie

@@ -32,6 +32,9 @@ class UserService {
   async deleteUser(id) {
     return await this.userRepository.deleteUser(id);
   }
+  async changePassword(userId, currentPassword, newPassword) {
+    return await this.userRepository.changePassword(userId, currentPassword, newPassword);
+  }
 
   async sendOTP(email){
     return await this.userRepository.sendPasswordResetOtpEmail(email);

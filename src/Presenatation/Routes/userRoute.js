@@ -24,7 +24,8 @@ async function userRoutes(fastify, options) {
   fastify.put('/resetPassword', (req, reply) => {
     const resetToken = req.query.resetToken; 
     userController.resetPassword(req, reply, resetToken);
-  });
+  }); 
+fastify.put('/users/changePassword', (req, reply) => userController.changePassword(req, reply));
 }
 
 module.exports = userRoutes;
