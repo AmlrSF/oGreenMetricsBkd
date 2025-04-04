@@ -12,53 +12,69 @@ const reportSchema = new mongoose.Schema(
     scope1: { type: Boolean, default: false },
     scope2: { type: Boolean, default: false },
     scope3: { type: Boolean, default: false },
-    startDate: { type: Date, required: true },
-    endDate: { type: Date, required: true },
+    Year: { type: String, default: true },
     includeCharts: { type: String, enum: ["yes", "no"], default: "yes" },
     detailLevel: {
       type: String,
       enum: ["summary", "detailed"],
       default: "summary",
     },
-    scope1Data: [
-      {
-        schemaType: { type: String, enum: ["FuelCombution", "Production"] },
-        refId: {
+
+    
+    scope1Data: {
+      fuelCombution: [
+        {
           type: mongoose.Schema.Types.ObjectId,
-          refPath: "scope1Data.schemaType",
+          ref: "FuelCombution",
         },
-      },
-    ],
-    scope2Data: [
-      {
-        schemaType: {
-          type: String,
-          enum: ["Cooling", "Heating", "EnergyConsumption"],
-        },
-        refId: {
+      ],
+      production: [
+        {
           type: mongoose.Schema.Types.ObjectId,
-          refPath: "scope2Data.schemaType",
+          ref: "Production",
         },
-      },
-    ],
-    scope3Data: [
-      {
-        schemaType: {
-          type: String,
-          enum: ["BusinessTravel", "Transport", "Dechet", "CapitalGood"],
-        },
-        refId: {
+      ],
+    },
+   
+    scope2Data: {
+      cooling: [
+        {
           type: mongoose.Schema.Types.ObjectId,
-          refPath: "scope3Data.schemaType",
+          ref: "Cooling",
         },
-      },
-    ],
+      ],
+      heating: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Heating",
+        },
+      ],
+      energyConsumption: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "EnergyConsumption",
+        },
+      ],
+    },
+
+    scope3Data: {
+      businessTravel: [{ type: mongoose.Schema.Types.ObjectId, ref: "BusinessTravel" }],
+      transport: [{ type: mongoose.Schema.Types.ObjectId, ref: "Transport" }],
+      dechet: [{ type: mongoose.Schema.Types.ObjectId, ref: "Dechet" }],
+      capitalGood: [{ type: mongoose.Schema.Types.ObjectId, ref: "CapitalGood" }],
+      businessTravelEmissions: { type: Number, default: 0 },
+      transportEmissions: { type: Number, default: 0 },
+      dechetEmissions: { type: Number, default: 0 },
+      capitalGoodEmissions: { type: Number, default: 0 },
+    },
+
     status: {
       type: String,
       enum: ["pending", "completed", "failed"],
       default: "pending",
     },
-    createdAt: { type: Date, default: Date.now }, // Timestamp
+
+    createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );

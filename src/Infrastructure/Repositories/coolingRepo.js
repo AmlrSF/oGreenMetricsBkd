@@ -2,10 +2,8 @@ const CoolingSchema = require('../../Domain/Entities/cooling');
 
 class CoolingRepo {
 
-
-  async getScope2DataByDateRange(startDate, endDate, company_id) {
+  async getCoolById(company_id) {
     return await CoolingSchema.find({
-      createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
       company_id: company_id, 
     }).lean();
   }

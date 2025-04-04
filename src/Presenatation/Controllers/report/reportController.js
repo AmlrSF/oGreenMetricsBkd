@@ -40,6 +40,8 @@ class ReportController {
   // Create a new report
   async createReport(req, reply) {
     try {
+      console.log(req.body);
+      
       const newReport = await this.reportService.createReport(req.body);
       reply.send({ success: true, data: newReport });
     } catch (error) {

@@ -8,7 +8,7 @@ const EnergyRepo = require("../../../Infrastructure/Repositories/energyConsumpti
 const TransportRepo = require("../../../Infrastructure/Repositories/scope-3/TransportRepo");
 const DechetRepo = require("../../../Infrastructure/Repositories/scope-3/DechetRepo");
 const CapitalGoodRepo = require("../../../Infrastructure/Repositories/scope-3/CapitalGoodRepo");
-const buisnessTravel = require("../../../Infrastructure/Repositories/scope-3/CapitalGoodRepo");
+const buisnessTravelRepo = require("../../../Infrastructure/Repositories/scope-3/BusinessTravelRepo");
 
 class ReportService {
   constructor(reportRepository) {
@@ -24,103 +24,83 @@ class ReportService {
   }
 
   async createReport(reportData) {
-    const { scope1, scope2, scope3, startDate, endDate, company_id } = reportData;
+    const { scope1, scope2, scope3, Year, company_id } = reportData;
+    console.log(reportData);
 
-    let scope1Data = [];
-    let scope2Data = [];
-    let scope3Data = [];
+    let scope1Data = {};
+    let scope2Data = {};
+    let scope3Data = {};
+    //console.log(Year);
 
-   
-    console.log(company_id)
-    
+    const isInYear = (item) => {
+      const created = new Date(item.createdAt);
+      const itemYear = created.getFullYear();
+      return itemYear == Year;
+    };
 
     if (scope1) {
-      const fuelData = await FuelRepo.getScope1DataByDateRange(
-        startDate,
-        endDate,
-        company_id
-      );
-      
-      const productionData = await productionRepo.getScope1DataByDateRange(
-        startDate,
-        endDate,
-        company_id
-      );
-      
-      scope1Data = [
-        ...fuelData.map((item) => ({
-          schemaType: "FuelCombution",
-          refId: item._id,
-        })),
-        ...productionData.map((item) => ({
-          schemaType: "Production",
-          refId: item._id,
-        })),
-      ];
+      const fuelData = await FuelRepo.findFuelById(company_id);
+      const productionData = await productionRepo.getproductionbyID(company_id);
+
+      scope1Data = {
+        fuelCombution: fuelData.filter(isInYear).map((item) => item._id),
+        production: productionData.filter(isInYear).map((item) => item._id),
+      };
     }
 
-    if(scope2){
+    if (scope2) {
       const heat = new HeatingRepo();
       const cool = new CoolingRepo();
       const energy = new EnergyRepo();
 
-      const Heating = await heat.getScope2DataByDateRange(
-        startDate,
-        endDate,
-        company_id
-      );
-      const Cooling = await cool.getScope2DataByDateRange(
-        startDate,
-        endDate,
-        company_id
-      );
-      const Energy = await energy.getScope2DataByDateRange(
-        startDate,
-        endDate,
-        company_id
-      );
+      const Heating = await heat.getHeatByid(company_id);
+      const Cooling = await cool.getCoolById(company_id);
+      const Energy = await energy.getEnergyByCompanyId(company_id);
 
-      scope1Data = [
-        ...Heating.map((item) => ({
-          schemaType: "Heating",
-          refId: item._id,
-        })),
-        ...Energy.map((item) => ({
-          schemaType: "EnergyConsumption",
-          refId: item._id,
-        })),
-        ...Cooling.map((item) => ({
-          schemaType: "Cooling",
-          refId: item._id,
-        })),
-      ];
+      scope2Data = {
+        heating: Heating.filter(isInYear).map((item) => item._id),
+        cooling: Cooling.filter(isInYear).map((item) => item._id),
+        energyConsumption: Energy.filter(isInYear).map((item) => item._id),
+      };
     }
 
-    if(scope3){
-      const transportRepo = new TransportRepo();
-      const dechetRepo = new DechetRepo();
-      const capitalGoodRepo = new CapitalGoodRepo();
-      const businessTravelRepo = new buisnessTravel();
-
-      const transportData = await transportRepo.getScope3DataByDateRange(startDate, endDate, company_id);
-      const dechetData = await dechetRepo.getScope3DataByDateRange(startDate, endDate, company_id);
-      const capitalGoodData = await capitalGoodRepo.getScope3DataByDateRange(startDate, endDate, company_id);
-      const businessTravelData = await businessTravelRepo.getScope3DataByDateRange(startDate, endDate, company_id);
-
-      scope3Data = [
-        ...transportData.map(item => ({ schemaType: "Transport", refId: item._id })),
-        ...dechetData.map(item => ({ schemaType: "Dechet", refId: item._id })),
-        ...capitalGoodData.map(item => ({ schemaType: "CapitalGood", refId: item._id })),
-        ...businessTravelData.map(item => ({ schemaType: "BusinessTravel", refId: item._id }))
-      ];
+    if (scope3) {
+      const transport = new TransportRepo();
+      const dechet = new DechetRepo();
+      const capitalGood = new CapitalGoodRepo();
+      const business = new buisnessTravelRepo();
+    
+      const Transport = await transport.getTransportById(company_id);
+      const Dechet = await dechet.getDechetById(company_id);
+      const CapitalGood = await capitalGood.getCapitalGoodByCompanyId(company_id);
+      const BusinessTravel = await business.getBusinessTravelByCompanyId(company_id);
+    
+      const filteredTransport = Transport.filter(isInYear);
+      const filteredDechet = Dechet.filter(isInYear);
+      const filteredCapitalGood = CapitalGood.filter(isInYear);
+      const filteredBusinessTravel = BusinessTravel.filter(isInYear);
+    
+      scope3Data = {
+        transport: filteredTransport.map((item) => item._id),
+        dechet: filteredDechet.map((item) => item._id),
+        capitalGood: filteredCapitalGood.map((item) => item._id),
+        businessTravel: filteredBusinessTravel.map((item) => item._id),
+    
+        
+        transportEmissions: filteredTransport.reduce((acc, item) => acc + Number(item.emissions || 0), 0),
+        dechetEmissions: filteredDechet.reduce((acc, item) => acc + Number(item.emissions || 0), 0),
+        capitalGoodEmissions: filteredCapitalGood.reduce((acc, item) => acc + Number(item.emissions || 0), 0),
+        businessTravelEmissions: filteredBusinessTravel.reduce((acc, item) => acc + Number(item.emissions || 0), 0),
+        
+      };
     }
+    
 
     const newReport = {
       ...reportData,
       scope1Data,
       scope2Data,
       scope3Data,
-      status: "pending",
     };
 
     return await this.reportRepository.createReport(newReport);

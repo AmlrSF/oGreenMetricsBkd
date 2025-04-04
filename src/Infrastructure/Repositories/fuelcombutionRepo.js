@@ -18,6 +18,10 @@ class FuelCombutionRepository {
     return await FuelCombution.find(criteria);
   }
 
+  async findFuelById(criteria) {
+    return await FuelCombution.find({companyId:criteria});
+  }
+
   async findOne(criteria) {
     return await FuelCombution.findOne(criteria);
   }
