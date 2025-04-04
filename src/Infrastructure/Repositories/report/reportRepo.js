@@ -3,16 +3,31 @@ const Report = require("../../../Domain/Entities/reporting/report"); // Ensure t
 
 class ReportRepo {
   async getAllReports(company_id) {
-
-    return await Report.find({company_id}).lean();
+    return await Report.find({ company_id })
+      .populate("scope1Data.fuelCombution")
+      .populate("scope1Data.production")
+      .populate("scope2Data.cooling")
+      .populate("scope2Data.heating")
+      .populate("scope2Data.energyConsumption")
+      .populate("scope3Data.businessTravel")
+      .populate("scope3Data.transport")
+      .populate("scope3Data.dechet")
+      .populate("scope3Data.capitalGood")
+      .lean();
   }
 
   async getReportById(reportId) {
-    const report = await Report.findById(reportId).populate([
-      { path: "scope1Data.refId" },
-      { path: "scope2Data.refId" },
-      { path: "scope3Data.refId" },
-    ]).lean();
+    const report = await Report.findById(reportId)
+      .populate("scope1Data.fuelCombution")
+      .populate("scope1Data.production")
+      .populate("scope2Data.cooling")
+      .populate("scope2Data.heating")
+      .populate("scope2Data.energyConsumption")
+      .populate("scope3Data.businessTravel")
+      .populate("scope3Data.transport")
+      .populate("scope3Data.dechet")
+      .populate("scope3Data.capitalGood")
+      .lean();
     if (!report) {
       throw new Error("Report not found");
     }
@@ -24,20 +39,20 @@ class ReportRepo {
       name: reportData.name,
       description: reportData.description,
       company_id: reportData.company_id,
-      
+
       scope1: reportData.scope1,
       scope2: reportData.scope2,
       scope3: reportData.scope3,
-      
-      Year:reportData.Year,
-      
+
+      Year: reportData.Year,
+
       includeCharts: reportData.includeCharts,
       detailLevel: reportData.detailLevel,
-      
+
       scope1Data: reportData.scope1Data,
       scope2Data: reportData.scope2Data,
       scope3Data: reportData.scope3Data,
-      
+
       status: "pending",
     });
     await newReport.save();
