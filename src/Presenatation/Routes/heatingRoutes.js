@@ -1,4 +1,4 @@
-const HeatingRepo = require('../../Infrastructure/Repositories/heatingRepo');
+const HeatingRepo = require('../../Infrastructure/Repositories/scope2/heatingRepo');
 const HeatingService = require('../../Application/Services/heatingService');
 const HeatingController = require('../Controllers/heatingController');
 

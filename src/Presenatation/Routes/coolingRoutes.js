@@ -1,4 +1,4 @@
-const CoolingRepo = require('../../Infrastructure/Repositories/coolingRepo');
+const CoolingRepo = require('../../Infrastructure/Repositories/scope2/coolingRepo');
 const CoolingService = require('../../Application/Services/coolingService');
 const CoolingController = require('../Controllers/coolingController');
 

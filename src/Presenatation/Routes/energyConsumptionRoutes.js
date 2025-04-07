@@ -1,4 +1,4 @@
-const EnergyConsumptionRepo = require('../../Infrastructure/Repositories/energyConsumptionRepo');
+const EnergyConsumptionRepo = require('../../Infrastructure/Repositories/scope2/energyConsumptionRepo');
 const EnergyConsumptionService = require('../../Application/Services/energyConsumptionService');
 const EnergyConsumptionController = require('../Controllers/energyConsumptionController');
 

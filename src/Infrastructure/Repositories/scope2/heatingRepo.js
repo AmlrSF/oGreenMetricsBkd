@@ -1,4 +1,4 @@
-const HeatingSchema = require("../../Domain/Entities/heating");
+const HeatingSchema = require("../../../Domain/Entities/heating");
 
 class HeatingRepo {
   

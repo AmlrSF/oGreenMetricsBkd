@@ -1,9 +1,9 @@
 const FuelRepo = require("../../../Infrastructure/Repositories/scope1/fuelcombutionRepo");
 const productionRepo = require("../../../Infrastructure/Repositories/scope1/productionRepo");
 
-const HeatingRepo = require("../../../Infrastructure/Repositories/heatingRepo");
-const CoolingRepo = require("../../../Infrastructure/Repositories/coolingRepo");
-const EnergyRepo = require("../../../Infrastructure/Repositories/energyConsumptionRepo");
+const HeatingRepo = require("../../../Infrastructure/Repositories/scope2/heatingRepo");
+const CoolingRepo = require("../../../Infrastructure/Repositories/scope2/coolingRepo");
+const EnergyRepo = require("../../../Infrastructure/Repositories/scope2/energyConsumptionRepo");
 
 const TransportRepo = require("../../../Infrastructure/Repositories/scope-3/TransportRepo");
 const DechetRepo = require("../../../Infrastructure/Repositories/scope-3/DechetRepo");

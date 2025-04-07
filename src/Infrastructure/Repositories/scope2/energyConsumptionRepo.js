@@ -1,4 +1,4 @@
-const EnergyConsumptionSchema = require("../../Domain/Entities/energyConsumption");
+const EnergyConsumptionSchema = require("../../../Domain/Entities/energyConsumption");
 
 class EnergyConsumptionRepo {
   
