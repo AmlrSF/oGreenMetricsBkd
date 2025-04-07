@@ -1,7 +1,8 @@
 
 class ReportController {
-  constructor(reportService) {
+  constructor(reportService, ShowDataService) {
     this.reportService = reportService;
+    this.ShowDataService = ShowDataService;
   }
 
   // Get all reports
@@ -92,6 +93,18 @@ class ReportController {
       reply.status(500).send({ success: false, message: error.message });
     }
   }
+
+  async getFullCompanyReport(req, reply) {
+    const { company_id } = req.params;
+
+    try {
+      const fullReport = await this.ShowDataService.getFullDataByCompany(company_id);
+      reply.send({ success: true, data: fullReport });
+    } catch (error) {
+      reply.status(500).send({ success: false, message: error.message });
+    }
+  }
+
 }
 
 module.exports = ReportController;
