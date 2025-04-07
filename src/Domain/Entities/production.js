@@ -1,4 +1,3 @@
-// Modified production.js (Domain/Entities)
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({

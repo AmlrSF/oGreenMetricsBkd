@@ -1,5 +1,5 @@
-const FuelRepo = require("../../../Infrastructure/Repositories/fuelcombutionRepo");
-const productionRepo = require("../../../Infrastructure/Repositories/productionRepo");
+const FuelRepo = require("../../../Infrastructure/Repositories/scope1/fuelcombutionRepo");
+const productionRepo = require("../../../Infrastructure/Repositories/scope1/productionRepo");
 
 const HeatingRepo = require("../../../Infrastructure/Repositories/heatingRepo");
 const CoolingRepo = require("../../../Infrastructure/Repositories/coolingRepo");

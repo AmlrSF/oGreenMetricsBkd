@@ -1,4 +1,4 @@
-const Production = require("../../Domain/Entities/production");
+const Production = require("../../../Domain/Entities/production");
 
 class ProductionRepository {
   

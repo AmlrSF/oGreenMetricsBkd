@@ -1,4 +1,4 @@
-const FuelCombution = require("../../Domain/Entities/fuelcombution");
+const FuelCombution = require("../../../Domain/Entities/fuelcombution");
 
 class FuelCombutionRepository {
   

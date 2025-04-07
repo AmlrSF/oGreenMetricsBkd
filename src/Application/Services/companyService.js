@@ -1,4 +1,4 @@
-const ProductionRepository = require('../../Infrastructure/Repositories/productionRepo');
+const ProductionRepository = require('../../Infrastructure/Repositories/scope1/productionRepo');
 
 class CompanyService {
   constructor(companyRepo) {
