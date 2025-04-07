@@ -2,11 +2,12 @@ const Fastify = require("fastify");
 const connectDB = require("./Infrastructure/database/mongooseConnection");
 const userRoutes = require("./Presenatation/Routes/userRoute");
 const companyRoutes = require("./Presenatation/Routes/companyRoute");
-const fuelRoutes = require("./Presenatation/Routes/fuelRoutes");
+const fuelRoutes = require("./Presenatation/Routes/scope1/fuelCombustionRoutes");
+const productionRoutes = require ("./Presenatation/Routes/scope1/productionRoutes")
 const roleRoutes = require("./Presenatation/Routes/RoleRoutes");
-const energyConsumptionRoutes = require("./Presenatation/Routes/energyConsumptionRoutes");
-const heatingRoutes = require("./Presenatation/Routes/heatingRoutes");
-const coolingRoutes = require("./Presenatation/Routes/coolingRoutes");
+const energyConsumptionRoutes = require("./Presenatation/Routes/scope2/energyConsumptionRoutes");
+const heatingRoutes = require("./Presenatation/Routes/scope2/heatingRoutes");
+const coolingRoutes = require("./Presenatation/Routes/scope2/coolingRoutes");
 
 //scope 3
 const {
@@ -40,6 +41,7 @@ app.register(fastifyCors, {
 app.register(userRoutes);
 app.register(companyRoutes);
 app.register(fuelRoutes);
+app.register(productionRoutes);
 app.register(roleRoutes);
 app.register(energyConsumptionRoutes);
 app.register(heatingRoutes);

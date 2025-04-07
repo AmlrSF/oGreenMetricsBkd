@@ -1,4 +1,3 @@
-// Modified fuelcombution.js (Domain/Entities)
 const mongoose = require('mongoose');
 
 const machineSchema = new mongoose.Schema({

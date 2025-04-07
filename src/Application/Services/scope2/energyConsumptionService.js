@@ -1,4 +1,4 @@
-const EnergyConsumptionRepo = require('../../Infrastructure/Repositories/energyConsumptionRepo');
+const EnergyConsumptionRepo = require('../../../Infrastructure/Repositories/scope2/energyConsumptionRepo');
 
 class EnergyConsumptionService {
   constructor(energyConsumptionRepo) {

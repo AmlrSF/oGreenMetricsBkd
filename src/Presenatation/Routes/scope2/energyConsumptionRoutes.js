@@ -1,6 +1,6 @@
-const EnergyConsumptionRepo = require('../../Infrastructure/Repositories/energyConsumptionRepo');
-const EnergyConsumptionService = require('../../Application/Services/energyConsumptionService');
-const EnergyConsumptionController = require('../Controllers/energyConsumptionController');
+const EnergyConsumptionRepo = require('../../../Infrastructure/Repositories/scope2/energyConsumptionRepo');
+const EnergyConsumptionService = require('../../../Application/Services/scope2/energyConsumptionService');
+const EnergyConsumptionController = require('../../Controllers/scope2/energyConsumptionController');
 
 async function energyConsumptionRoute(fastify, options) {
   const energyConsumptionRepo = new EnergyConsumptionRepo();

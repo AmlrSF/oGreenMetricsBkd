@@ -29,8 +29,30 @@ class UserRepo {
     }
   
     return userData;
-  }
+  } 
   
+    async changePassword(userId, currentPassword, newPassword) {
+      try {
+        // Find the user
+        const userDoc = await UserSchema.findById(userId);
+        if (!userDoc) {
+          throw new Error("User not found");
+        }
+   
+        const isMatch = await comparePassword(currentPassword, userDoc.mot_de_passe);
+        if (!isMatch) {
+          throw new Error("Current password is incorrect");
+        }
+   
+        const hashedPassword = await hashPassword(newPassword);
+        userDoc.mot_de_passe = hashedPassword;
+        await userDoc.save();
+  
+        return { message: "Password changed successfully" };
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    } 
 
   async updateUser(id, updateData) {
     const userDoc = await UserSchema.findByIdAndUpdate(id, updateData, {

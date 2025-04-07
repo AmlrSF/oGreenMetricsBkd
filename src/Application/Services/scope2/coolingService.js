@@ -1,4 +1,4 @@
-const CoolingRepo = require('../../Infrastructure/Repositories/coolingRepo');
+const CoolingRepo = require('../../../Infrastructure/Repositories/scope2/coolingRepo');
 
 class CoolingService {
   constructor(coolingRepo) {
