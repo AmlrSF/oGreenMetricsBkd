@@ -1,6 +1,6 @@
-const HeatingRepo = require('../../Infrastructure/Repositories/scope2/heatingRepo');
-const HeatingService = require('../../Application/Services/heatingService');
-const HeatingController = require('../Controllers/heatingController');
+const HeatingRepo = require('../../../Infrastructure/Repositories/scope2/heatingRepo');
+const HeatingService = require('../../../Application/Services/scope2/heatingService');
+const HeatingController = require('../../Controllers/scope2/heatingController');
 
 async function heatingRoute(fastify, options) {
   const heatingRepo = new HeatingRepo();

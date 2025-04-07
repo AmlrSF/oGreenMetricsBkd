@@ -1,4 +1,4 @@
-const CoolingSchema = require('../../../Domain/Entities/cooling');
+const CoolingSchema = require('../../../Domain/Entities/scope2/cooling');
 
 class CoolingRepo {
 

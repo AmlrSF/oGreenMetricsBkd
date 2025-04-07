@@ -1,6 +1,6 @@
-const CoolingRepo = require('../../Infrastructure/Repositories/scope2/coolingRepo');
-const CoolingService = require('../../Application/Services/coolingService');
-const CoolingController = require('../Controllers/coolingController');
+const CoolingRepo = require('../../../Infrastructure/Repositories/scope2/coolingRepo');
+const CoolingService = require('../../../Application/Services/scope2/coolingService');
+const CoolingController = require('../../Controllers/scope2/coolingController');
 
 async function coolingRoute(fastify, options) {
   const coolingRepo = new CoolingRepo();

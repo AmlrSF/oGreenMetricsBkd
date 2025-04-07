@@ -1,4 +1,4 @@
-const HeatingRepo = require('../../Infrastructure/Repositories/scope2/heatingRepo');
+const HeatingRepo = require('../../../Infrastructure/Repositories/scope2/heatingRepo');
 
 class HeatingService {
   constructor(heatingRepo) {
