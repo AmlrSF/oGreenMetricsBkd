@@ -1,63 +1,91 @@
 const UserSchema = require("../../Domain/Entities/user");
 const jwt = require("jsonwebtoken");
-const crypto = require('crypto');
-
+const crypto = require("crypto");
+const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
+
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const { hashPassword, comparePassword } = require("../utils/hash");
 const sendOTP = require("../utils/sendOTP");
-const sendEmailInvitation = require('../utils/sendEmailInvitation');
+const sendEmailInvitation = require("../utils/sendEmailInvitation");
 const OTPSchema = require("../../Domain/Entities/OTP");
 
 class UserRepo {
-  
   async getAllUsers() {
-    const usersData = await UserSchema.find().populate('AdminRoles').lean();
+    const usersData = await UserSchema.find().populate("AdminRoles").lean();
     return usersData;
   }
 
   async getUserById(id) {
-    const userData = await UserSchema.findById(id).populate('AdminRoles').lean();
+    const userData = await UserSchema.findById(id)
+      .populate("AdminRoles")
+      .lean();
     return userData;
   }
 
   async getUserByEmail(email) {
     const userData = await UserSchema.findOne({ email });
-  
+
     if (!userData) {
       throw new Error("User not found");
     }
-  
+
     return userData;
-  } 
-  
-    async changePassword(userId, currentPassword, newPassword) {
-      try {
-        // Find the user
-        const userDoc = await UserSchema.findById(userId);
-        if (!userDoc) {
-          throw new Error("User not found");
-        }
-   
-        const isMatch = await comparePassword(currentPassword, userDoc.mot_de_passe);
-        if (!isMatch) {
-          throw new Error("Current password is incorrect");
-        }
-   
-        const hashedPassword = await hashPassword(newPassword);
-        userDoc.mot_de_passe = hashedPassword;
-        await userDoc.save();
-  
-        return { message: "Password changed successfully" };
-      } catch (error) {
-        throw new Error(error.message);
+  }
+
+  async changePassword(userId, currentPassword, newPassword) {
+    try {
+      // Find the user
+      const userDoc = await UserSchema.findById(userId);
+      if (!userDoc) {
+        throw new Error("User not found");
       }
-    } 
+
+      const isMatch = await comparePassword(
+        currentPassword,
+        userDoc.mot_de_passe
+      );
+      if (!isMatch) {
+        throw new Error("Current password is incorrect");
+      }
+
+      const hashedPassword = await hashPassword(newPassword);
+      userDoc.mot_de_passe = hashedPassword;
+      await userDoc.save();
+
+      return { message: "Password changed successfully" };
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 
   async updateUser(id, updateData) {
+    if (
+      updateData.photo_de_profil &&
+      updateData.photo_de_profil.trim() !== ""
+    ) {
+      
+      const uploaded = await cloudinary.uploader.upload(
+        updateData.photo_de_profil,
+        {
+          folder: "user_profiles", 
+        }
+      );
+
+      
+      updateData.photo_de_profil = uploaded.secure_url;
+    }
+
     const userDoc = await UserSchema.findByIdAndUpdate(id, updateData, {
       new: true,
     }).lean();
+
     return userDoc;
   }
 
@@ -66,8 +94,8 @@ class UserRepo {
     return result.deletedCount > 0;
   }
 
-  async registerUser(prenom, nom, email, mot_de_passe, role,AdminRoles) {
-    return this.createUser(prenom, nom, email, mot_de_passe, role,AdminRoles);
+  async registerUser(prenom, nom, email, mot_de_passe, role, AdminRoles) {
+    return this.createUser(prenom, nom, email, mot_de_passe, role, AdminRoles);
   }
 
   async createUser(prenom, nom, email, mot_de_passe, role, AdminRoles) {
@@ -85,7 +113,7 @@ class UserRepo {
       email,
       mot_de_passe: hashedPassword,
       role,
-      AdminRoles
+      AdminRoles,
     });
     return userDoc.toObject();
   }
@@ -96,11 +124,10 @@ class UserRepo {
 
       console.log("Resetting password for:", email);
 
-     
       const updatedUser = await UserSchema.findOneAndUpdate(
-        { email: email }, 
+        { email: email },
         { mot_de_passe: hashedPassword },
-        { new: true } 
+        { new: true }
       );
 
       if (!updatedUser) {
@@ -114,9 +141,8 @@ class UserRepo {
   }
 
   async loginUser(email, mot_de_passe) {
-
-    console.log(email,mot_de_passe)
-    const userDoc = await UserSchema.findOne({ email }).populate('AdminRoles');
+    console.log(email, mot_de_passe);
+    const userDoc = await UserSchema.findOne({ email }).populate("AdminRoles");
     if (!userDoc) {
       throw new Error("User not found");
     }
@@ -132,7 +158,7 @@ class UserRepo {
       { expiresIn: "1h" }
     );
 
-    return { user: userDoc, token  };
+    return { user: userDoc, token };
   }
 
   async sendPasswordResetOtpEmail(email) {
@@ -174,9 +200,9 @@ class UserRepo {
   async verifyAndDeleteResetToken(email, token) {
     const user = await this.getUserByEmail(email);
 
-    console.log(token == user.resetToke)
+    console.log(token == user.resetToke);
     if (user.resetToken !== token || user.resetTokenExpires < Date.now()) {
-       throw new Error("Token invalide ou expiré");
+      throw new Error("Token invalide ou expiré");
     }
 
     user.resetToken = null;
@@ -185,16 +211,14 @@ class UserRepo {
   }
 
   async sendEmailInvitation(user) {
-
-    const Invitationdetails  = {
+    const Invitationdetails = {
       subject: "Invitaiton ",
-      message : "You've Been Invited to Moderate!",
-      user
+      message: "You've Been Invited to Moderate!",
+      user,
     };
 
     const createOTP = await sendEmailInvitation(Invitationdetails);
     return createOTP;
-    
   }
 }
 
