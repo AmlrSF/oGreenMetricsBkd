@@ -4,14 +4,17 @@ class CompanyController {
   }
 
   async getCompanies(req, reply) {
-    const { userId } = req.query;
+    
     try {
-      const companies = await this.companyService.getAllCompanies(userId);
+      const companies = await this.companyService.getAllCompanies();
       reply.send({ success: true, data: companies });
     } catch (error) {
       reply.status(500).send({ success: false, message: error.message });
     }
   }
+
+
+  
 
   async getCompanyByOwnerId(req, reply) {
     const { id } = req.params;

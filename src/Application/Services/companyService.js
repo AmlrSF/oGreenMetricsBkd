@@ -5,8 +5,8 @@ class CompanyService {
     this.companyRepo = companyRepo;
   }
 
-  async getAllCompanies(userId) {
-    return await this.companyRepo.getAllCompanies(userId);
+  async getAllCompanies() {
+    return await this.companyRepo.getAllCompanies();
   }
  
   async getCompanyByOwnerId(userId) {

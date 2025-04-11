@@ -20,6 +20,7 @@ async function reportRoute(fastify, options) {
   fastify.get("/report/full/:company_id", async (req, reply) =>
     reportController.getFullCompanyReport(req, reply)
   );
+  fastify.get('/reports', (req, reply) => reportController.getAllReportsData(req, reply));
 }
 
 module.exports = reportRoute;

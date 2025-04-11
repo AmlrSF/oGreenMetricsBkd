@@ -34,6 +34,22 @@ class ReportRepo {
     return report;
   }
 
+
+  async getAllReportsData() {
+    return await Report.find()
+      .populate("scope1Data.fuelCombution")
+      .populate("scope1Data.production")
+      .populate("scope2Data.cooling")
+      .populate("scope2Data.heating")
+      .populate("scope2Data.energyConsumption")
+      .populate("scope3Data.businessTravel")
+      .populate("scope3Data.transport")
+      .populate("scope3Data.dechet")
+      .populate("scope3Data.capitalGood")
+      .lean();
+  }
+
+
   async createReport(reportData) {
     const newReport = new Report({
       name: reportData.name,

@@ -113,6 +113,10 @@ class ReportService {
   async deleteReport(reportId) {
     return await this.reportRepository.deleteReport(reportId);
   }
+
+  async getAllReportsData(){
+    return await this.reportRepository.getAllReportsData();
+  }
 }
 
 module.exports = ReportService;
