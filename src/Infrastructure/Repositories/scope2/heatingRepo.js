@@ -13,7 +13,9 @@ class HeatingRepo {
       : { heaters: [], totalEmissions: 0, company_id };
   }
 
-
+  async findById(id) {
+    return await HeatingSchema.findById(id);
+  }
 
   async createHeating(heatingData) {
     const newHeating = new HeatingSchema(heatingData);

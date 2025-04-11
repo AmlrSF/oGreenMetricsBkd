@@ -7,6 +7,10 @@ class CoolingRepo {
       company_id: company_id, 
     }).lean();
   }
+  
+  async findById(id) {
+    return await CoolingSchema.findById(id);
+  }
 
   async getCoolingByCompanyId(company_id) { 
     const coolingData = await CoolingSchema.find({ company_id }).lean();
