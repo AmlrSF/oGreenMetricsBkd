@@ -1,7 +1,7 @@
-
 class ReportController {
-  constructor(reportService) {
+  constructor(reportService, ShowDataService) {
     this.reportService = reportService;
+    this.ShowDataService = ShowDataService;
   }
 
   // Get all reports
@@ -9,8 +9,17 @@ class ReportController {
     const { id } = req.params;
     try {
       console.log(id);
-      
+
       const reports = await this.reportService.getAllReports(id);
+      reply.send({ success: true, data: reports });
+    } catch (error) {
+      reply.status(500).send({ success: false, message: error.message });
+    }
+  }
+
+  async getAllReportsData(req, reply) {
+    try {
+      const reports = await this.reportService.getAllReportsData();
       reply.send({ success: true, data: reports });
     } catch (error) {
       reply.status(500).send({ success: false, message: error.message });
@@ -25,12 +34,10 @@ class ReportController {
       if (report) {
         reply.send({ success: true, data: report });
       } else {
-        reply
-          .status(404)
-          .send({
-            success: false,
-            message: "Report not found",
-          });
+        reply.status(404).send({
+          success: false,
+          message: "Report not found",
+        });
       }
     } catch (error) {
       reply.status(500).send({ success: false, message: error.message });
@@ -41,7 +48,7 @@ class ReportController {
   async createReport(req, reply) {
     try {
       console.log(req.body);
-      
+
       const newReport = await this.reportService.createReport(req.body);
       reply.send({ success: true, data: newReport });
     } catch (error) {
@@ -54,16 +61,17 @@ class ReportController {
     const { id } = req.params;
     const updateData = req.body;
     try {
-      const updatedReport = await this.reportService.updateReport(id, updateData);
+      const updatedReport = await this.reportService.updateReport(
+        id,
+        updateData
+      );
       if (updatedReport) {
         reply.send({ success: true, data: updatedReport });
       } else {
-        reply
-          .status(404)
-          .send({
-            success: false,
-            message: "Report not found",
-          });
+        reply.status(404).send({
+          success: false,
+          message: "Report not found",
+        });
       }
     } catch (error) {
       reply.status(400).send({ success: false, message: error.message });
@@ -81,13 +89,24 @@ class ReportController {
           message: "Report deleted successfully",
         });
       } else {
-        reply
-          .status(404)
-          .send({
-            success: false,
-            message: "Report not found",
-          });
+        reply.status(404).send({
+          success: false,
+          message: "Report not found",
+        });
       }
+    } catch (error) {
+      reply.status(500).send({ success: false, message: error.message });
+    }
+  }
+
+  async getFullCompanyReport(req, reply) {
+    const { company_id } = req.params;
+
+    try {
+      const fullReport = await this.ShowDataService.getFullDataByCompany(
+        company_id
+      );
+      reply.send({ success: true, data: fullReport });
     } catch (error) {
       reply.status(500).send({ success: false, message: error.message });
     }
