@@ -41,13 +41,17 @@ app.register(fastifyCors, {
 // Register routes
 app.register(userRoutes);
 app.register(companyRoutes);
+app.register(goalRoutes)
+app.register(roleRoutes);
+
+//scope 1
 app.register(fuelRoutes);
 app.register(productionRoutes);
-app.register(roleRoutes);
+
+//scope 2
 app.register(energyConsumptionRoutes);
 app.register(heatingRoutes);
 app.register(coolingRoutes);
-app.register(goalRoutes)
 
 //scope 3
 app.register(transport);
@@ -55,9 +59,9 @@ app.register(dechets);
 app.register(capitalGoods);
 app.register(businessTravel)
 
-
 //report
 app.register(report);
+
 // Connect to database
 connectDB();
 
