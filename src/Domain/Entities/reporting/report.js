@@ -19,7 +19,8 @@ const reportSchema = new mongoose.Schema(
       enum: ["summary", "detailed"],
       default: "summary",
     },
-
+    includeRecomondations: {
+       type: String, enum: ["yes", "no"], default: "yes" },
     
     scope1Data: {
       fuelCombution: [

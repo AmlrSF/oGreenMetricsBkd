@@ -63,6 +63,7 @@ class ReportRepo {
       Year: reportData.Year,
 
       includeCharts: reportData.includeCharts,
+      includeRecomondations:reportData.includeRecomondations,
       detailLevel: reportData.detailLevel,
 
       scope1Data: reportData.scope1Data,
