@@ -89,7 +89,7 @@ class UserController {
         path: "/", 
         maxAge: 3600, 
       });
-      console.log(user)
+      //console.log(user)
       reply.code(200).send({ user });
     } catch (error) {
       reply.code(200).send({ error: error.message });

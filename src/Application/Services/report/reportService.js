@@ -9,6 +9,9 @@ const TransportRepo = require("../../../Infrastructure/Repositories/scope-3/Tran
 const DechetRepo = require("../../../Infrastructure/Repositories/scope-3/DechetRepo");
 const CapitalGoodRepo = require("../../../Infrastructure/Repositories/scope-3/CapitalGoodRepo");
 const buisnessTravelRepo = require("../../../Infrastructure/Repositories/scope-3/BusinessTravelRepo");
+const purchasedGoodAndService = require("../../../Infrastructure/Repositories/scope-3/PurchasedGoodsAndServiceRepo")
+const EmployesTransport = require("../../../Infrastructure/Repositories/scope-3/EmployesTransportRepo")
+
 
 class ReportService {
   constructor(reportRepository) {
@@ -69,29 +72,39 @@ class ReportService {
       const dechet = new DechetRepo();
       const capitalGood = new CapitalGoodRepo();
       const business = new buisnessTravelRepo();
+      const employes = new EmployesTransport();
     
       const Transport = await transport.getTransportById(company_id);
       const Dechet = await dechet.getDechetById(company_id);
       const CapitalGood = await capitalGood.getCapitalGoodByCompanyId(company_id);
       const BusinessTravel = await business.getBusinessTravelByCompanyId(company_id);
+      const Employes = await employes.getEmployesTransportByCompanyId(company_id);
+      const purchasedGoods = await purchasedGoodAndService.getByCompanyId(company_id);
     
+
+
       const filteredTransport = Transport.filter(isInYear);
       const filteredDechet = Dechet.filter(isInYear);
       const filteredCapitalGood = CapitalGood.filter(isInYear);
       const filteredBusinessTravel = BusinessTravel.filter(isInYear);
-    
+      const filteredEmployes = Employes.filter(isInYear);
+      const filteredpurchasedGoods= purchasedGoods.filter(isInYear);
+      
       scope3Data = {
         transport: filteredTransport.map((item) => item._id),
         dechet: filteredDechet.map((item) => item._id),
         capitalGood: filteredCapitalGood.map((item) => item._id),
         businessTravel: filteredBusinessTravel.map((item) => item._id),
-    
+        purchasedGood:filteredpurchasedGoods.map((item) => item._id),
+        employesTransport: filteredEmployes.map((item) => item._id),
+
         
         transportEmissions: filteredTransport.reduce((acc, item) => acc + Number(item.emissions || 0), 0),
         dechetEmissions: filteredDechet.reduce((acc, item) => acc + Number(item.emissions || 0), 0),
         capitalGoodEmissions: filteredCapitalGood.reduce((acc, item) => acc + Number(item.emissions || 0), 0),
         businessTravelEmissions: filteredBusinessTravel.reduce((acc, item) => acc + Number(item.emissions || 0), 0),
-        
+        purchasedGoodEmissions:filteredpurchasedGoods.reduce((acc, item) => acc + Number(item.emissions || 0), 0),
+        employesTransportEmissions:filteredEmployes.reduce((acc, item) => acc + Number(item.emissions || 0), 0),
       };
     }
     
