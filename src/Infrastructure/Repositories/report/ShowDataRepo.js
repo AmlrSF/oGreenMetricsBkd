@@ -9,6 +9,8 @@ const TransportRepo = require("../../../Infrastructure/Repositories/scope-3/Tran
 const DechetRepo = require("../../../Infrastructure/Repositories/scope-3/DechetRepo");
 const CapitalGoodRepo = require("../../../Infrastructure/Repositories/scope-3/CapitalGoodRepo");
 const BusinessTravelRepo = require("../../../Infrastructure/Repositories/scope-3/BusinessTravelRepo");
+const purchasedGoodAndService = require("../../../Infrastructure/Repositories/scope-3/PurchasedGoodsAndServiceRepo")
+const EmployesTransport = require("../../../Infrastructure/Repositories/scope-3/EmployesTransportRepo")
 
 class ShowDataRepo {
   constructor() {
@@ -20,6 +22,8 @@ class ShowDataRepo {
     this.dechetRepo = new DechetRepo();
     this.capitalGoodRepo = new CapitalGoodRepo();
     this.businessTravelRepo = new BusinessTravelRepo();
+
+    this.EmployesTransport = new EmployesTransport();
   }
 
   async generateDataByCompanyId(company_id) {
@@ -39,6 +43,8 @@ class ShowDataRepo {
       dechet: await this.dechetRepo.getDechetById(company_id),
       capitalGood: await this.capitalGoodRepo.getCapitalGoodByCompanyId(company_id),
       businessTravel: await this.businessTravelRepo.getBusinessTravelByCompanyId(company_id),
+      employesTransport:await this.EmployesTransport.getAllEmployesTransports(company_id),
+      purchasedGood:await purchasedGoodAndService.getByCompanyId(company_id)
     };
 
     return {

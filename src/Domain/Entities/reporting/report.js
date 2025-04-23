@@ -61,19 +61,19 @@ const reportSchema = new mongoose.Schema(
     scope3Data: {
       businessTravel: [{ type: mongoose.Schema.Types.ObjectId, ref: "BusinessTravel" }],
       transport: [{ type: mongoose.Schema.Types.ObjectId, ref: "Transport" }],
+      employesTransport: [{ type: mongoose.Schema.Types.ObjectId, ref: "EmployesTransport" }],
       dechet: [{ type: mongoose.Schema.Types.ObjectId, ref: "Dechet" }],
       capitalGood: [{ type: mongoose.Schema.Types.ObjectId, ref: "CapitalGood" }],
+      purchasedGood: [{ type: mongoose.Schema.Types.ObjectId, ref: "PurchasedGood" }],
       businessTravelEmissions: { type: Number, default: 0 },
       transportEmissions: { type: Number, default: 0 },
+      employesTransportEmissions: { type: Number, default: 0 },
       dechetEmissions: { type: Number, default: 0 },
       capitalGoodEmissions: { type: Number, default: 0 },
+      purchasedGoodEmissions: { type: Number, default: 0 },
     },
-
-    status: {
-      type: String,
-      enum: ["pending", "completed", "failed"],
-      default: "pending",
-    },
+    
+   
 
     createdAt: { type: Date, default: Date.now },
   },

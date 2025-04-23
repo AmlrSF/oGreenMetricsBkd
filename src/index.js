@@ -3,7 +3,7 @@ const connectDB = require("./Infrastructure/database/mongooseConnection");
 const userRoutes = require("./Presenatation/Routes/userRoute");
 const companyRoutes = require("./Presenatation/Routes/companyRoute");
 const fuelRoutes = require("./Presenatation/Routes/scope1/fuelCombustionRoutes");
-const productionRoutes = require ("./Presenatation/Routes/scope1/productionRoutes")
+const productionRoutes = require("./Presenatation/Routes/scope1/productionRoutes");
 const roleRoutes = require("./Presenatation/Routes/RoleRoutes");
 const energyConsumptionRoutes = require("./Presenatation/Routes/scope2/energyConsumptionRoutes");
 const heatingRoutes = require("./Presenatation/Routes/scope2/heatingRoutes");
@@ -15,11 +15,16 @@ const {
   transport,
   dechets,
   capitalGoods,
-  businessTravel
+  businessTravel,
+  purchasedGoodsAndServices,
+  EmployesTransport,
 } = require("./Presenatation/Routes/scope-3");
 
-const report = require("./Presenatation/Routes/report/reportRoutes");
+//website calculator
+const websiteCalc = require("./Presenatation/Routes/site/websitecalcRoutes")
+const siteRoutes = require("./Presenatation/Routes/site/siteRoutes")
 
+const report = require("./Presenatation/Routes/report/reportRoutes");
 
 const fastifyCookie = require("fastify-cookie");
 const fastifyCors = require("@fastify/cors");
@@ -57,8 +62,14 @@ app.register(coolingRoutes);
 app.register(transport);
 app.register(dechets);
 app.register(capitalGoods);
-app.register(businessTravel)
+app.register(businessTravel);
+app.register(purchasedGoodsAndServices);
+app.register(EmployesTransport);
 
+ 
+app.register(websiteCalc)
+app.register(siteRoutes)
+ 
 //report
 app.register(report);
 

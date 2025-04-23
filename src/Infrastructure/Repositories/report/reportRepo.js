@@ -11,8 +11,10 @@ class ReportRepo {
       .populate("scope2Data.energyConsumption")
       .populate("scope3Data.businessTravel")
       .populate("scope3Data.transport")
+      .populate("scope3Data.employesTransport")
       .populate("scope3Data.dechet")
       .populate("scope3Data.capitalGood")
+      .populate("scope3Data.purchasedGood")
       .lean();
   }
 
@@ -25,15 +27,18 @@ class ReportRepo {
       .populate("scope2Data.energyConsumption")
       .populate("scope3Data.businessTravel")
       .populate("scope3Data.transport")
+      .populate("scope3Data.employesTransport")
       .populate("scope3Data.dechet")
       .populate("scope3Data.capitalGood")
+      .populate("scope3Data.purchasedGood")
       .lean();
+
     if (!report) {
       throw new Error("Report not found");
     }
+
     return report;
   }
-
 
   async getAllReportsData() {
     return await Report.find()
@@ -44,11 +49,12 @@ class ReportRepo {
       .populate("scope2Data.energyConsumption")
       .populate("scope3Data.businessTravel")
       .populate("scope3Data.transport")
+      .populate("scope3Data.employesTransport")
       .populate("scope3Data.dechet")
       .populate("scope3Data.capitalGood")
+      .populate("scope3Data.purchasedGood")
       .lean();
   }
-
 
   async createReport(reportData) {
     const newReport = new Report({
@@ -70,7 +76,7 @@ class ReportRepo {
       scope2Data: reportData.scope2Data,
       scope3Data: reportData.scope3Data,
 
-      status: "pending",
+     
     });
     await newReport.save();
     return newReport;
