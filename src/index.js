@@ -19,6 +19,10 @@ const {
   EmployesTransport,
 } = require("./Presenatation/Routes/scope-3");
 
+//website calculator
+const websiteCalc = require("./Presenatation/Routes/site/websitecalcRoutes")
+const siteRoutes = require("./Presenatation/Routes/site/siteRoutes")
+
 const report = require("./Presenatation/Routes/report/reportRoutes");
 
 const fastifyCookie = require("fastify-cookie");
@@ -55,6 +59,11 @@ app.register(capitalGoods);
 app.register(businessTravel);
 app.register(purchasedGoodsAndServices);
 app.register(EmployesTransport);
+
+
+//website calculation
+app.register(websiteCalc)
+app.register(siteRoutes)
 
 //report
 app.register(report);
