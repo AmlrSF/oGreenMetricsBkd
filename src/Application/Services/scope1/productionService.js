@@ -1,10 +1,10 @@
 const productionRepo = require('../../../Infrastructure/Repositories/scope1/productionRepo');
-const CompanyRepo = require('../../../Infrastructure/Repositories/companyRepo'); // Import CompanyRepo
+const CompanyRepo = require('../../../Infrastructure/Repositories/companyRepo');
 
 class ProductionService {
   constructor(productionRepo) {
     this.productionRepo = productionRepo;
-    this.companyRepo = new CompanyRepo(); // Initialize CompanyRepo
+    this.companyRepo = new CompanyRepo();
   }
 
   async addProduction(data, companyId) {
@@ -13,14 +13,19 @@ class ProductionService {
       throw new Error("Products array is required and must not be empty");
     }
 
-    // Fetch the company to get the emissions value (used as emissionFactor)
+    // Validate that each product has ligneDeProduction
+    products.forEach(product => {
+      if (!product.ligneDeProduction) {
+        throw new Error("ligneDeProduction is required for each product");
+      }
+    });
+
     const company = await this.companyRepo.getCompanyById(companyId);
     if (!company) {
       throw new Error("Company not found");
     }
-    const emissionFactor = company.emissions; // Use company.emissions as emissionFactor
+    const emissionFactor = company.emissions;
 
-    // Calculate co2Emission for each product
     const updatedProducts = products.map(product => ({
       ...product,
       co2Emission: product.quantite * emissionFactor,
@@ -28,21 +33,18 @@ class ProductionService {
 
     let existingRecord = await this.productionRepo.findOne({ companyId });
     if (existingRecord) {
-      // Append new products to existing ones
       existingRecord.products.push(...updatedProducts);
-      // Recalculate totalEmissions as sum of all co2Emissions
       existingRecord.totalEmissions = existingRecord.products.reduce(
         (sum, product) => sum + product.co2Emission,
         0
       );
-      existingRecord.emissionFactor = emissionFactor; // Update emissionFactor
+      existingRecord.emissionFactor = emissionFactor;
       return await this.productionRepo.update(existingRecord._id, {
         products: existingRecord.products,
         totalEmissions: existingRecord.totalEmissions,
         emissionFactor: existingRecord.emissionFactor,
       });
     } else {
-      // Calculate initial totalEmissions
       const totalEmissions = updatedProducts.reduce(
         (sum, product) => sum + product.co2Emission,
         0
@@ -50,7 +52,7 @@ class ProductionService {
       const newData = {
         products: updatedProducts,
         totalEmissions,
-        emissionFactor, // Set emissionFactor from company.emissions
+        emissionFactor,
         companyId,
       };
       return await this.productionRepo.create(newData);
@@ -88,7 +90,10 @@ class ProductionService {
     const productIndex = record.products.findIndex(p => p._id.toString() === productId);
     if (productIndex === -1) throw new Error("Product not found");
 
-    // Fetch emissionFactor from company
+    if (!updatedProduct.ligneDeProduction) {
+      throw new Error("ligneDeProduction is required");
+    }
+
     const company = await this.companyRepo.getCompanyById(companyId);
     if (!company) throw new Error("Company not found");
     const emissionFactor = company.emissions;
@@ -96,7 +101,7 @@ class ProductionService {
     const newProduct = {
       ...record.products[productIndex],
       ...updatedProduct,
-      co2Emission: updatedProduct.quantite * emissionFactor, // Recalculate co2Emission
+      co2Emission: updatedProduct.quantite * emissionFactor,
     };
 
     record.products[productIndex] = newProduct;
@@ -104,7 +109,7 @@ class ProductionService {
       (sum, product) => sum + product.co2Emission,
       0
     );
-    record.emissionFactor = emissionFactor; // Ensure emissionFactor is updated
+    record.emissionFactor = emissionFactor;
 
     return await this.productionRepo.update(record._id, {
       products: record.products,

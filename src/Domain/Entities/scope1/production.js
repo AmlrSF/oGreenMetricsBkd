@@ -4,6 +4,7 @@ const productSchema = new mongoose.Schema({
   nom: { type: String, required: true },
   quantite: { type: Number, required: true },
   co2Emission: { type: Number, default: 0 },
+  ligneDeProduction: { type: String, required: true }, 
 });
 
 const productionSchema = new mongoose.Schema({

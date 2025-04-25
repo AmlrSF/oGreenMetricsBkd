@@ -37,6 +37,7 @@ class CompanyController {
       date_fondation,
       industrie,
       userId,
+      country
     } = req.body;
     try {
       const result = await this.companyService.createCompany(
@@ -47,7 +48,8 @@ class CompanyController {
         adresse,
         date_fondation,
         industrie,
-        userId
+        userId,
+        country
       );
       console.log("Company created successfully:", result);
       reply.send({ success: true, data: result });

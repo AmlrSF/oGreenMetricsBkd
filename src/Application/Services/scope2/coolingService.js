@@ -37,17 +37,39 @@ class CoolingService {
   }
 
   async updateCooler(recordId, coolerId, name, type, energy) {
-    const existingData = await this.coolingRepo.getCoolingById(recordId);
-    if (!existingData._id || existingData._id.toString() !== recordId) throw new Error('Cooling record not found');
-    const coolerIndex = existingData.coolers.findIndex(cooler => cooler._id.toString() === coolerId);
+    // Directly find the record by its _id
+    const existingData = await this.coolingRepo.findById(recordId);
+    
+    if (!existingData) throw new Error('Cooling record not found');
+    
+    // Find the cooler by ID
+    const coolerIndex = existingData.coolers.findIndex(cooler => 
+      cooler._id.toString() === coolerId
+    );
+    
     if (coolerIndex === -1) throw new Error('Cooler not found');
+    
+    // Calculate new emissions
     const oldEmissions = existingData.coolers[coolerIndex].emissions;
     const emissionFactor = await this.getEmissionFactor(type);
     const emissions = await this.calculateEmissions(energy, type);
-    existingData.coolers[coolerIndex] = { _id: coolerId, name, type, energy, emissionFactor, emissions };
+    
+    // Update the cooler
+    existingData.coolers[coolerIndex] = { 
+      ...existingData.coolers[coolerIndex],  // Keep the original _id
+      name, 
+      type, 
+      energy, 
+      emissionFactor, 
+      emissions 
+    };
+    
+    // Update total emissions
     existingData.totalEmissions = existingData.totalEmissions - oldEmissions + emissions;
+    
+    // Save the updated record
     return await this.coolingRepo.updateCooling(recordId, existingData);
-}
+  }
 
   async deleteCooler(recordId, coolerId) {
     return await this.coolingRepo.deleteCooler(recordId, coolerId);

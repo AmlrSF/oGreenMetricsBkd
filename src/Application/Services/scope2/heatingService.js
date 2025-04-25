@@ -37,18 +37,39 @@ class HeatingService {
   }
 
   async updateHeater(recordId, heaterId, name, type, energy) {
-    const existingData = await this.heatingRepo.getHeatingByCompanyId(existingData.company_id);
-    if (!existingData._id || existingData._id.toString() !== recordId) throw new Error('Heating record not found');
-    const heaterIndex = existingData.heaters.findIndex(heater => heater._id.toString() === heaterId);
+    // Directly find the record by its _id, not by company_id
+    const existingData = await this.heatingRepo.findById(recordId);
+    
+    if (!existingData) throw new Error('Heating record not found');
+    
+    // Find the heater by ID
+    const heaterIndex = existingData.heaters.findIndex(heater => 
+      heater._id.toString() === heaterId
+    );
+    
     if (heaterIndex === -1) throw new Error('Heater not found');
+    
+    // Calculate new emissions
     const oldEmissions = existingData.heaters[heaterIndex].emissions;
     const emissionFactor = await this.getEmissionFactor(type);
     const emissions = await this.calculateEmissions(energy, type);
-    existingData.heaters[heaterIndex] = { _id: heaterId, name, type, energy, emissionFactor, emissions };
+    
+    // Update the heater
+    existingData.heaters[heaterIndex] = { 
+      ...existingData.heaters[heaterIndex],  // Keep the original _id and any other fields
+      name, 
+      type, 
+      energy, 
+      emissionFactor, 
+      emissions 
+    };
+    
+    // Update total emissions
     existingData.totalEmissions = existingData.totalEmissions - oldEmissions + emissions;
+    
+    // Save the updated record
     return await this.heatingRepo.updateHeating(recordId, existingData);
   }
-
   async deleteHeater(recordId, heaterId) {
     return await this.heatingRepo.deleteHeater(recordId, heaterId);
   }

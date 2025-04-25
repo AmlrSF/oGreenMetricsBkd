@@ -1,8 +1,11 @@
 const ProductionRepository = require('../../Infrastructure/Repositories/scope1/productionRepo');
+const EnergyConsumptionService = require ('./scope2/energyConsumptionService')
+const industryEmissionFactors = require('./IndustryEmissions');
 
 class CompanyService {
   constructor(companyRepo) {
     this.companyRepo = companyRepo;
+    this.EnergyConsumptionService = new EnergyConsumptionService(null);
   }
 
   async getAllCompanies() {
@@ -13,13 +16,12 @@ class CompanyService {
     return await this.companyRepo.getCompanyByOwnerId(userId);
   }
 
-  async createCompany(nom_entreprise, matricule_fiscale, email, num_tel, adresse, date_fondation, industrie, userId) {
-    console.log({ nom_entreprise, matricule_fiscale, email, num_tel, adresse, date_fondation, industrie, userId });
-
+  async createCompany(nom_entreprise, matricule_fiscale, email, num_tel, adresse, date_fondation, industrie, userId,country) {
+ 
     // Get emission factor based on industry
     const emissionFactor = await this.getEmissionFactor(industrie);
     const emissions = emissionFactor;   
-
+    const countryEmissionFactor = country ? await this.EnergyConsumptionService.getEmissionFactor(country) : 0;
     // Create company
     const companyData = { 
         nom_entreprise, 
@@ -29,6 +31,8 @@ class CompanyService {
         adresse, 
         date_fondation, 
         industrie,
+        country,
+        countryEmissionFactor,
         emissions, 
         userId 
     };
@@ -75,13 +79,9 @@ class CompanyService {
   }
 
   async getEmissionFactor(industrie) {
-    const factors = {
-      "Cement production": 0.43971,
-      "Lime production": 0.86,
-      // Add other industries here
-    };
-    return factors[industrie] || 1;
+    return industryEmissionFactors[industrie] || 1;
   }
+  
 }
 
 module.exports = CompanyService;

@@ -8,6 +8,7 @@ const roleRoutes = require("./Presenatation/Routes/RoleRoutes");
 const energyConsumptionRoutes = require("./Presenatation/Routes/scope2/energyConsumptionRoutes");
 const heatingRoutes = require("./Presenatation/Routes/scope2/heatingRoutes");
 const coolingRoutes = require("./Presenatation/Routes/scope2/coolingRoutes");
+const goalRoutes = require("./Presenatation/Routes/goalRoutes");
 
 //scope 3
 const {
@@ -45,9 +46,14 @@ app.register(fastifyCors, {
 // Register routes
 app.register(userRoutes);
 app.register(companyRoutes);
+app.register(goalRoutes)
+app.register(roleRoutes);
+
+//scope 1
 app.register(fuelRoutes);
 app.register(productionRoutes);
-app.register(roleRoutes);
+
+//scope 2
 app.register(energyConsumptionRoutes);
 app.register(heatingRoutes);
 app.register(coolingRoutes);
@@ -60,13 +66,13 @@ app.register(businessTravel);
 app.register(purchasedGoodsAndServices);
 app.register(EmployesTransport);
 
-
-//website calculation
+ 
 app.register(websiteCalc)
 app.register(siteRoutes)
-
+ 
 //report
 app.register(report);
+
 // Connect to database
 connectDB();
 
