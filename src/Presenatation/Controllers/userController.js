@@ -80,8 +80,7 @@ class UserController {
       );
 
       
-      
-
+    
       reply.setCookie("auth_token", token, {
         httpOnly: true, 
         secure: process.env.NODE_ENV === "production", 
@@ -89,6 +88,7 @@ class UserController {
         path: "/", 
         maxAge: 3600, 
       });
+
       //console.log(user)
       reply.code(200).send({ user });
     } catch (error) {

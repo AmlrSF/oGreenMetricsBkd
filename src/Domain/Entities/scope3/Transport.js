@@ -5,7 +5,7 @@ const TransportSchema = new mongoose.Schema({
   distance: { type: Number, required: true },      
   poids: { type: Number, required: true },         
   mode: { type: String, required: true },          
-  type: { type: String, required: true },          
+  type: { type: String },          
   company_id: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Company',                               
