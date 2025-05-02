@@ -8,6 +8,10 @@ class EnergyConsumptionRepo {
     }).lean();
   }
 
+  async findById(id) {
+    return await EnergyConsumptionSchema.findById(id).lean();
+  }
+
   async getEnergyConsumptionByCompanyId(company_id) {
     const energyData = await EnergyConsumptionSchema.find({
       company_id,
