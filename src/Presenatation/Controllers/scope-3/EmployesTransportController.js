@@ -62,6 +62,28 @@ class EmployesTransportController {
       reply.status(500).send({ success: false, message: error.message });
     }
   }
+
+
+
+  async deleteEmployesTransport(req, reply) {
+    const { id } = req.params;
+    try {
+      const isDeleted = await this.employesTransportService.deleteEmployesTransport(id);
+      if (isDeleted) {
+        reply.send({
+          success: true,
+          message: "Transport deleted successfully",
+        });
+      } else {
+        reply
+          .status(404)
+          .send({ success: false, message: "Transport not found" });
+      }
+    } catch (error) {
+      reply.status(500).send({ success: false, message: error.message });
+    }
+  }
+
 }
 
 module.exports = EmployesTransportController;
