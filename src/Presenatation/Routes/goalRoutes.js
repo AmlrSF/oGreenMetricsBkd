@@ -1,4 +1,3 @@
-// routes/goalRoutes.js
 const GoalRepo = require('../../Infrastructure/Repositories/goalRepo');
 const GoalService = require('../../Application/Services/goalService');
 const GoalController = require('../Controllers/GoalController');
