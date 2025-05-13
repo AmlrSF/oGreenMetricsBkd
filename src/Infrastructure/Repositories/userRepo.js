@@ -3,7 +3,25 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
+const CompanySchema = require("../../Domain/Entities/company");
 
+const Fuel = require("../../Domain/Entities/scope1/fuelcombution");
+const Production = require("../../Domain/Entities/scope1/production");
+
+const Heating = require("../../Domain/Entities/scope2/heating");
+const Cooling = require("../../Domain/Entities/scope2/cooling");
+const Energy = require("../../Domain/Entities/scope2/energyConsumption");
+
+const Transport = require("../../Domain/Entities/scope3/Transport");
+const Dechet = require("../../Domain/Entities/scope3/Dechets");
+const CapitalGood = require("../../Domain/Entities/scope3/CapitalGoods");
+const BusinessTravel = require("../../Domain/Entities/scope3/buisnessTravel");
+const purchasedGoodAndService = require("../../Domain/Entities/scope3/PurchasedGoodsAndService");
+const EmployesTransport = require("../../Domain/Entities/scope3/EmployesTransport");
+
+const goal = require("../../Domain/Entities/goal");
+const report = require("../../Domain/Entities/reporting/report");
+const siteSchema = require("../../Domain/Entities/site/site");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -15,8 +33,54 @@ const { hashPassword, comparePassword } = require("../utils/hash");
 const sendOTP = require("../utils/sendOTP");
 const sendEmailInvitation = require("../utils/sendEmailInvitation");
 const OTPSchema = require("../../Domain/Entities/OTP");
+const fuelcombution = require("../../Domain/Entities/scope1/fuelcombution");
 
 class UserRepo {
+  async deleteUser(userId) {
+   
+    const company = await CompanySchema.findOne({ userId });
+    const site = await siteSchema.find({userId})
+    if(company){
+      await Promise.all([
+   
+        Fuel.deleteMany({ companyId:company._id }),
+        Production.deleteMany({ companyId:company._id }),
+  
+        Heating.deleteMany({ company_id:company._id }),
+        Cooling.deleteMany({ company_id:company._id }),
+        Energy.deleteMany({ company_id:company._id }),
+  
+     
+        Transport.deleteMany({ company_id:company._id }),
+        Dechet.deleteMany({ company_id:company._id }),
+        CapitalGood.deleteMany({ company_id:company._id }),
+        BusinessTravel.deleteMany({ company_id:company._id }),
+        purchasedGoodAndService.deleteMany({ company_id:company._id }),
+        EmployesTransport.deleteMany({ company_id:company._id }),
+  
+       
+        goal.deleteMany({ company_id:company._id }),
+        report.deleteMany({ company_id:company._id }),
+      ]);
+  
+   
+      await CompanySchema.deleteOne({ userId });
+    }
+
+
+    if(site){
+      siteSchema.deleteMany({ userId })
+    }
+
+    const result = await UserSchema.deleteOne({ _id: userId });
+
+    
+
+    return result;
+  }
+
+
+
   async getAllUsers() {
     const usersData = await UserSchema.find().populate("AdminRoles").lean();
     return usersData;
@@ -70,15 +134,13 @@ class UserRepo {
       updateData.photo_de_profil &&
       updateData.photo_de_profil.trim() !== ""
     ) {
-      
       const uploaded = await cloudinary.uploader.upload(
         updateData.photo_de_profil,
         {
-          folder: "user_profiles", 
+          folder: "user_profiles",
         }
       );
 
-      
       updateData.photo_de_profil = uploaded.secure_url;
     }
 
@@ -87,11 +149,6 @@ class UserRepo {
     }).lean();
 
     return userDoc;
-  }
-
-  async deleteUser(id) {
-    const result = await UserSchema.deleteOne({ _id: id });
-    return result.deletedCount > 0;
   }
 
   async registerUser(prenom, nom, email, mot_de_passe, role, AdminRoles) {
