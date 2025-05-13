@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+
 class GoalController {
   constructor(goalService) {
     this.goalService = goalService;
@@ -81,9 +82,9 @@ class GoalController {
 
   async checkGoalAttainment(req, reply) {
     const { company_id } = req.params;
-    const currentEmissions = req.body.currentEmissions;
+    const { currentEmissions, userId } = req.body; // Updated to extract userId
     try {
-      const attainedGoals = await this.goalService.checkGoalAttainment(company_id, currentEmissions);
+      const attainedGoals = await this.goalService.checkGoalAttainment(company_id, currentEmissions, userId); // Pass userId
       reply.send({ success: true, data: attainedGoals });
     } catch (error) {
       reply.status(500).send({ success: false, message: error.message });

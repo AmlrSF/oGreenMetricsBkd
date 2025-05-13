@@ -9,6 +9,8 @@ const energyConsumptionRoutes = require("./Presenatation/Routes/scope2/energyCon
 const heatingRoutes = require("./Presenatation/Routes/scope2/heatingRoutes");
 const coolingRoutes = require("./Presenatation/Routes/scope2/coolingRoutes");
 const goalRoutes = require("./Presenatation/Routes/goalRoutes");
+const notificationRoutes = require("./Presenatation/Routes/notificationRoutes");
+
 
 //scope 3
 const {
@@ -69,6 +71,7 @@ app.register(EmployesTransport);
  
 app.register(websiteCalc)
 app.register(siteRoutes)
+app.register(notificationRoutes)
  
 //report
 app.register(report);
