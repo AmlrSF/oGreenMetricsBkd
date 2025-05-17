@@ -5,13 +5,40 @@ class NotificationController {
     this.notificationService = notificationService;
   }
 
-  async getNotifications(req, reply) {
+  async getUserNotifications(req, reply) {
     const { user_id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(user_id)) {
       return reply.status(400).send({ success: false, message: 'Invalid user ID' });
     }
     try {
       const notifications = await this.notificationService.getUserNotifications(user_id);
+      reply.send({ success: true, data: notifications });
+    } catch (error) {
+      reply.status(500).send({ success: false, message: error.message });
+    }
+  }
+
+  async getAdminUserNotifications(req, reply) {
+    try {
+      const notifications = await this.notificationService.getAdminUserNotifications();
+      reply.send({ success: true, data: notifications });
+    } catch (error) {
+      reply.status(500).send({ success: false, message: error.message });
+    }
+  }
+
+  async getAdminCompanyNotifications(req, reply) {
+    try {
+      const notifications = await this.notificationService.getAdminCompanyNotifications();
+      reply.send({ success: true, data: notifications });
+    } catch (error) {
+      reply.status(500).send({ success: false, message: error.message });
+    }
+  }
+
+  async getAllAdminNotifications(req, reply) {
+    try {
+      const notifications = await this.notificationService.getAllAdminNotifications();
       reply.send({ success: true, data: notifications });
     } catch (error) {
       reply.status(500).send({ success: false, message: error.message });
