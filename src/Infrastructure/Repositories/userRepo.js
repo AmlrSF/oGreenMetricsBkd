@@ -32,54 +32,45 @@ cloudinary.config({
 const { hashPassword, comparePassword } = require("../utils/hash");
 const sendOTP = require("../utils/sendOTP");
 const sendEmailInvitation = require("../utils/sendEmailInvitation");
+const sendVerificationEmail = require("../utils/sendVerificationEmail");
 const OTPSchema = require("../../Domain/Entities/OTP");
 const fuelcombution = require("../../Domain/Entities/scope1/fuelcombution");
 
 class UserRepo {
   async deleteUser(userId) {
-   
     const company = await CompanySchema.findOne({ userId });
-    const site = await siteSchema.find({userId})
-    if(company){
+    const site = await siteSchema.find({ userId });
+    if (company) {
       await Promise.all([
-   
-        Fuel.deleteMany({ companyId:company._id }),
-        Production.deleteMany({ companyId:company._id }),
-  
-        Heating.deleteMany({ company_id:company._id }),
-        Cooling.deleteMany({ company_id:company._id }),
-        Energy.deleteMany({ company_id:company._id }),
-  
-     
-        Transport.deleteMany({ company_id:company._id }),
-        Dechet.deleteMany({ company_id:company._id }),
-        CapitalGood.deleteMany({ company_id:company._id }),
-        BusinessTravel.deleteMany({ company_id:company._id }),
-        purchasedGoodAndService.deleteMany({ company_id:company._id }),
-        EmployesTransport.deleteMany({ company_id:company._id }),
-  
-       
-        goal.deleteMany({ company_id:company._id }),
-        report.deleteMany({ company_id:company._id }),
+        Fuel.deleteMany({ companyId: company._id }),
+        Production.deleteMany({ companyId: company._id }),
+
+        Heating.deleteMany({ company_id: company._id }),
+        Cooling.deleteMany({ company_id: company._id }),
+        Energy.deleteMany({ company_id: company._id }),
+
+        Transport.deleteMany({ company_id: company._id }),
+        Dechet.deleteMany({ company_id: company._id }),
+        CapitalGood.deleteMany({ company_id: company._id }),
+        BusinessTravel.deleteMany({ company_id: company._id }),
+        purchasedGoodAndService.deleteMany({ company_id: company._id }),
+        EmployesTransport.deleteMany({ company_id: company._id }),
+
+        goal.deleteMany({ company_id: company._id }),
+        report.deleteMany({ company_id: company._id }),
       ]);
-  
-   
+
       await CompanySchema.deleteOne({ userId });
     }
 
-
-    if(site){
-      siteSchema.deleteMany({ userId })
+    if (site) {
+      siteSchema.deleteMany({ userId });
     }
 
     const result = await UserSchema.deleteOne({ _id: userId });
 
-    
-
     return result;
   }
-
-
 
   async getAllUsers() {
     const usersData = await UserSchema.find().populate("AdminRoles").lean();
@@ -142,6 +133,16 @@ class UserRepo {
       );
 
       updateData.photo_de_profil = uploaded.secure_url;
+    }
+
+    console.log(updateData);
+
+    const userData = await UserSchema.findById(id);
+
+    if (updateData?.isVerified) {
+      await sendVerificationEmail(userData, true);
+    } else {
+      await sendVerificationEmail(userData, false);
     }
 
     const userDoc = await UserSchema.findByIdAndUpdate(id, updateData, {

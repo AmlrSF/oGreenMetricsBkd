@@ -233,11 +233,11 @@ class UserController {
   async InviteUser(req, reply) {
     try {
       console.log(req.body)
-      const CreatedpasswordResetOTP = await this.userService.inviteUser(req.body);
+      const Userinfo = await this.userService.inviteUser(req.body);
     
-      reply.status(200).send({ CreatedpasswordResetOTP });
+      reply.status(200).send({ Userinfo });
     } catch (error) {
-      console.error("Error in sendPasswordResetOtpEmail:", error);
+      console.error("Error :", error);
       reply.status(400).send({ message: error.message }); 
     }
   }
