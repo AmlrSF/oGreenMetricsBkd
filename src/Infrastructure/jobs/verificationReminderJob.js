@@ -10,10 +10,8 @@ class VerificationReminderJob {
     this.notificationService = new NotificationService(new NotificationRepo());
   }
 
-  start() {
-    // Run every minute (pour les tests, en production on mettrait un intervalle plus long)
+  start() { 
     cron.schedule('*/1 * * * *', async () => {
-      console.log('Checking for unverified users/companies...')
       await this.checkUnverifiedUsers();
       await this.checkUnverifiedCompanies();
     });
@@ -39,8 +37,7 @@ class VerificationReminderJob {
         await User.findByIdAndUpdate(user._id, { lastReminderSent: new Date() });
       }
     } catch (error) {
-      console.error('Error in user verification job:', error);
-    }
+     }
   }
 
   async checkUnverifiedCompanies() {
@@ -63,8 +60,7 @@ class VerificationReminderJob {
         await Company.findByIdAndUpdate(company._id, { lastReminderSent: new Date() });
       }
     } catch (error) {
-      console.error('Error in company verification job:', error);
-    }
+     }
   }
 }
 

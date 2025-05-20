@@ -20,8 +20,7 @@ class EnergyConsumptionService {
       // Fall back to the static emission factors if company doesn't have one
       return emissionFactors[country] || 0;
     } catch (error) {
-      console.error("Error getting emission factor:", error);
-      return emissionFactors[country] || 0;
+       return emissionFactors[country] || 0;
     }
   }
 
