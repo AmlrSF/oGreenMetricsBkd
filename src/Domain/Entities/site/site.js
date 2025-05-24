@@ -1,18 +1,23 @@
 const mongoose = require('mongoose');
 
+const BreakdownItemSchema = new mongoose.Schema({
+  count: Number,
+  sizeKB: String,
+  co2g: String
+}, { _id: false });
+
 const WebsiteDataSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Utilisateur' 
+    ref: 'Utilisateur'
   },
   url: {
     type: String,
     required: true
   },
   green: {
-    type: Boolean,
-    default: false
+    type: String,
   },
   bytes: Number,
   cleanerThan: Number,
@@ -30,7 +35,17 @@ const WebsiteDataSchema = new mongoose.Schema({
         litres: Number
       }
     }
-  }
+  },
+  breakdown: {
+    html: BreakdownItemSchema,
+    css: BreakdownItemSchema,
+    javascript: BreakdownItemSchema,
+    image: BreakdownItemSchema,
+    font: BreakdownItemSchema,
+    xhr: BreakdownItemSchema,
+    other: BreakdownItemSchema
+  },
+  suggestions: [String]
 }, {
   timestamps: true
 });
