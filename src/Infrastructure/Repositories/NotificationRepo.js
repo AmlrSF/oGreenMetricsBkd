@@ -66,6 +66,22 @@ class NotificationRepo {
       throw new Error(`Failed to delete notification: ${error.message}`);
     }
   }
+
+  async markNotificationAsRead(notificationId) {
+  try {
+    const notification = await Notification.findByIdAndUpdate(
+      notificationId,
+      { is_read: true, updatedAt: Date.now() },
+      { new: true }
+    );
+    if (!notification) {
+      throw new Error('Notification not found');
+    }
+    return notification;
+  } catch (error) {
+    throw new Error(`Failed to mark notification as read: ${error.message}`);
+  }
+}
 }
 
 module.exports = NotificationRepo;

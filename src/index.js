@@ -10,8 +10,9 @@ const heatingRoutes = require("./Presenatation/Routes/scope2/heatingRoutes");
 const coolingRoutes = require("./Presenatation/Routes/scope2/coolingRoutes");
 const goalRoutes = require("./Presenatation/Routes/goalRoutes");
 const notificationRoutes = require("./Presenatation/Routes/notificationRoutes");
-const VerificationReminderJob = require('./Infrastructure/jobs/verificationReminderJob')
-VerificationReminderJob.start();
+const { scheduleVerificationCheckEveryMinute } = require('./Infrastructure/Cron/verificationJobs');
+scheduleVerificationCheckEveryMinute();
+
 
 //scope 3
 const {

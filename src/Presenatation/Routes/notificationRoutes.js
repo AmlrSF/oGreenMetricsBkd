@@ -26,6 +26,10 @@ async function notificationRoutes(fastify, options) {
   // Delete a notification
   fastify.delete('/notifications/:notification_id', (req, reply) => 
     notificationController.deleteNotification(req, reply));
+  // Mark notification as read
+  fastify.put('/notifications/:notification_id/read', (req, reply) => 
+  notificationController.markNotificationAsRead(req, reply));
 }
+
 
 module.exports = notificationRoutes;

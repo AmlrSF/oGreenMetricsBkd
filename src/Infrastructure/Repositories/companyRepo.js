@@ -1,5 +1,6 @@
 const CompanySchema = require("../../Domain/Entities/company");
 
+
 class CompanyRepo {
   async getAllCompanies() {
     const companiesData = await CompanySchema.find({})
@@ -8,6 +9,15 @@ class CompanyRepo {
     return companiesData;
   }
 
+  async getUnverifiedCompanies() {
+    try {
+      return await CompanySchema.find({ 
+        isVerified: false 
+      }).select('_id nom_entreprise isVerified').lean();
+    } catch (error) {
+      throw new Error(`Failed to fetch unverified companies: ${error.message}`);
+    }
+  }
   
 
   async getCompanyById(companyId) {
