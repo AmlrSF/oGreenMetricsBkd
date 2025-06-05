@@ -1,7 +1,7 @@
 const SiteControllers = require("../../../Presenatation/Controllers/site/siteControllers");
 const SiteService = require("../../../Application/Services/Site/siteService");
 const siteRepository = require("../../../Infrastructure/Repositories/site/siteRepo");
-const puppeteer = require("puppeteer");
+
 const site = require("../../../Domain/Entities/site/site");
 
 async function siteRoutes(fastify, options) {
@@ -23,7 +23,10 @@ async function siteRoutes(fastify, options) {
     siteController.deleteSite(req, reply)
   );
 
-  fastify.post("/carbon-calculator", siteController.carbonCals(req,reply));
+  fastify.post(
+    "/carbon-calculator",
+    (req, reply)=>siteController.CalculerDetailedSite(req, reply)
+  );
 }
 
 module.exports = siteRoutes;

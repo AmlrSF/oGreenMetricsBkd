@@ -1,3 +1,5 @@
+const puppeteer = require("puppeteer");
+
 class SiteController {
   constructor(siteService) {
     this.siteService = siteService;
@@ -76,8 +78,8 @@ class SiteController {
     }
   }
 
-  async CalculerDetailedSite(request, reply) {
-    const { url } = request.body;
+  async CalculerDetailedSite(req, reply) {
+    const { url } = req.body;
 
     if (!url) {
       return reply.code(400).send({ message: "URL is required" });
@@ -247,7 +249,7 @@ class SiteController {
               ],
       });
     } catch (err) {
-      fastify.log.error(err);
+      
       return reply.code(500).send({
         message: "Error calculating carbon emissions",
         error: err.message,
