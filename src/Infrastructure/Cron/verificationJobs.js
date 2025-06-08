@@ -1,3 +1,4 @@
+// Infrastructure/Cron/verificationJobs.js
 const cron = require('node-cron');
 const UserRepo = require("../Repositories/userRepo");
 const CompanyRepo = require("../Repositories/companyRepo");
@@ -20,16 +21,19 @@ const verificationReminderService = new VerificationReminderService(
 const runVerificationChecks = async () => {
   console.log('Running scheduled verification checks...');
   try {
-    await verificationReminderService.checkAllVerificationStatuses();
-   } catch (error) {
-   }
+    const results = await verificationReminderService.checkAllVerificationStatuses();
+    console.log('Verification check completed:', results);
+  } catch (error) {
+    console.error('Error in scheduled verification check:', error);
+  }
 };
  
 const scheduleVerificationCheckEveryMinute = () => {
-  cron.schedule('* * * * *', runVerificationChecks);
+  cron.schedule('* * * * *', runVerificationChecks, {
+    timezone: 'UTC'
+  });
   console.log('Scheduled verification checks every minute');
 };
-
 module.exports = {
   scheduleVerificationCheckEveryMinute,
   runVerificationChecks
