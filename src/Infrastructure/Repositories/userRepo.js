@@ -198,6 +198,17 @@ class UserRepo {
     }
   }
 
+  async getUnverifiedUsers() {
+    try {
+      return await UserSchema.find({ 
+        isVerified: false,
+        role: { $ne: "Admin" } // Exclure les administrateurs
+      }).select('_id prenom nom email isVerified').lean();
+    } catch (error) {
+      throw new Error(`Failed to fetch unverified users: ${error.message}`);
+    }
+  }
+
   async loginUser(email, mot_de_passe) {
     console.log(email, mot_de_passe);
     const userDoc = await UserSchema.findOne({ email }).populate("AdminRoles");
